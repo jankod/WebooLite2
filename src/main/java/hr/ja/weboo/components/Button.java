@@ -18,7 +18,6 @@ public class Button extends Component {
 
     @Override
     public String toHtml() {
-        super.handleEvents();
 
         String t = """
               <button {idClassAttr.raw} >{label}</button>

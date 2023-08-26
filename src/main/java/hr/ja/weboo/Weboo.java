@@ -1,6 +1,8 @@
 package hr.ja.weboo;
 
+import hr.ja.weboo.js.AjaxResult;
 import hr.ja.weboo.js.JsUtil;
+import hr.ja.weboo.js.ServerHandler;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -23,19 +25,25 @@ public class Weboo {
         Spark.port(port);
         staticFiles.location("/public"); // Static files;
 
+        post("/weboo/event", (request, response) -> {
 
-//        post("/weboo/event", (request, sparkResponse) -> {
-//            String widgetId = request.headers("weboo_widget_id");
-//            String eventId = request.headers("weboo_handler_id");
-//            String webooEventType = request.headers("weboo_event_type");
-//
-////            EventManager.EventType eventType = EventManager.EventType.valueOf(webooEventType);
-//
-////            AjaxResult ajaxResult = EventManager.handleRequest(widgetId, eventId, eventType);
-//
-//            sparkResponse.type("application/json");
-//            return WebooUtil.toJson(ajaxResult);
-//        });
+            String widgetId = request.headers("Weboo_widget_id");
+            String handlerId = request.headers("Weboo_handler_id");
+            String eventName = request.headers("Weboo_event_name");
+            String pageId = request.headers("Weboo_page_id");
+
+            Context.setRequest(request, response, pageId, null);
+            response.type("application/json");
+
+
+            EventHandler eventHandler = ServerHandler.get(handlerId, widgetId, pageId);
+            if (eventHandler == null) {
+                log.error("Cannot find event handler!!!");
+                return WebooUtil.toJson(AjaxResult.alert("Error, cannot find event handler!"));
+            }
+            return WebooUtil.toJson(eventHandler.handle());
+
+        });
 
 
         for (PageMeta pageMeta : pageManager.getAllPages()) {
@@ -58,13 +66,13 @@ public class Weboo {
                           <script>
                           // command definitions by widgets
                           %s
-                          
+                                                    
                           // event call code
                           %s
                           </script>
                           """.formatted(jsCommandCode, jsEventsCode));
 
-                  //  newPage.onRequest();
+                    //  newPage.onRequest();
 
                     return layout.renderPage(newPage);
 
@@ -87,4 +95,7 @@ public class Weboo {
     }
 
 
+    public static String getPath(Class<? extends Page> page) {
+        return pageManager.getPath(page);
+    }
 }

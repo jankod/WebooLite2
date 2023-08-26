@@ -54,7 +54,7 @@ public class Context {
 
     }
 
-    public static void prepareCommand(Class<? extends JsCommand> commandClass) {
+    public static void register(Class<? extends JsCommand> commandClass) {
         CurrentContext context = contextHolder.get();
         if(context != null) {
             context.getCommandDefinitions().add(commandClass);

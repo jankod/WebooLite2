@@ -1,6 +1,6 @@
 package hr.ja.weboo;
 
-import lombok.Getter;
+import hr.ja.weboo.js.JsCommand;
 import lombok.experimental.Delegate;
 import spark.Response;
 
@@ -12,4 +12,5 @@ public class WebooResponse {
     public WebooResponse(Response sparkResponse) {
         this.sparkResponse = sparkResponse;
     }
+
 }

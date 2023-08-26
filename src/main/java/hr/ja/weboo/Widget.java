@@ -38,33 +38,16 @@ public abstract class Widget {
     public abstract String toHtml();
 
     protected String getIdClassAttr() {
-        String eventsAttr = prepareEvents();
 
-        String attr = WebooUtil.qute("""
+        return WebooUtil.qute("""
                     id="{id}" class="{class}"
                     """, Map.of(
                     "id", getWidgetId(),
                     "class", getClasses()
               )
         );
-   //     log.debug("attr '{}'", attr);
-
-        return attr;
     }
 
-    private String prepareEvents() {
-        if (clientEvents.isEmpty()) {
-            return "";
-        }
-        String jsCode = "";
-        for (ClientEvent ev : clientEvents) {
-            //ev.getEventName();
-        }
-        return " data-weboo-events=\"%s\" ".formatted(jsCode);
 
-    }
 
-    protected void handleEvents() {
-
-    }
 }

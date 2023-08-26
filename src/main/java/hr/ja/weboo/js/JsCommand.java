@@ -13,7 +13,7 @@ public abstract class JsCommand {
     public JsCommand() {
              name = JsUtil.createJsCommandName(getClass());
         //name = createName();
-        Context.prepareCommand(this.getClass());
+        Context.register(this.getClass());
 //        log.debug("Create name {}", name);
     }
 

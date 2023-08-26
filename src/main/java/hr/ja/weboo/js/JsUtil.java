@@ -1,6 +1,7 @@
 package hr.ja.weboo.js;
 
 import hr.ja.weboo.ClientEvent;
+import hr.ja.weboo.Context;
 import hr.ja.weboo.WebooUtil;
 import hr.ja.weboo.Widget;
 import hr.ja.weboo.components.Component;
@@ -24,22 +25,23 @@ public class JsUtil {
             for (ClientEvent e : clientEvents) {
                 String eventName = e.getEventName();
                 String widgetId = e.getWidgetId();
-//                List<JsCommand> jsCommandList = e.getJsCommandList();
                 JsCommand jsCommand = e.getCommand();
-//
-               String jsonCommandData = WebooUtil.toJson(jsCommand);
+
+                String handlerId = ServerHandler.register(e.getServerHandler(), Context.getPageId(), widgetId);
+
+                String jsonCommandData = WebooUtil.toJson(jsCommand);
                 String template = """
                        $("#{widgetId}").on("{eventName}", function (e) {
                           const res =  weboo.exeCommand( {jsonCommandData.raw} );
-                          console.log("Event res: ", res);
-                          // TODO: posalji na server ove podatke
+                          weboo.handleEventOnServer("{widgetId}", "{eventName}", "{handlerId}", res);
                        });
                        
                       """;
                 js.append(WebooUtil.qute(template, Map.of(
                       "widgetId", widgetId,
                       "eventName", eventName,
-                      "jsonCommandData", jsonCommandData
+                      "jsonCommandData", jsonCommandData,
+                      "handlerId", handlerId
                 )));
             }
 
