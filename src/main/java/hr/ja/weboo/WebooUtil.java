@@ -3,11 +3,6 @@ package hr.ja.weboo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hr.ja.weboo.components.Component;
-import hr.ja.weboo.js.JavaScript;
-import hr.ja.weboo.js.JsCommand;
-import hr.ja.weboo.js.JsUtil;
-import hr.ja.weboo.js.JavaScriptParam;
 import io.quarkus.qute.*;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -15,17 +10,14 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 @Slf4j
 public class WebooUtil {
@@ -163,10 +155,9 @@ public class WebooUtil {
         return aClass.getSimpleName() + "_" + idCounter++;
     }
 
-    public static String pageNewId(Class<? extends Page> aClass) {
-        return aClass.getSimpleName() + "_" + RandomStringUtils.randomNumeric(10);
-    }
-
+//    public static String pageNewId(Class<? extends Page> aClass) {
+//        return aClass.getSimpleName() + "_" + RandomStringUtils.randomNumeric(10);
+//    }
 
 
     public static void printStackTraceError(Exception e) {
@@ -185,6 +176,7 @@ public class WebooUtil {
     }
 
 
-
-
+    public static String createPageId() {
+        return UUID.randomUUID().toString();
+    }
 }

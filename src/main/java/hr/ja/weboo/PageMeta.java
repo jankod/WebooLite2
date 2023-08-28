@@ -3,6 +3,8 @@ package hr.ja.weboo;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
+import java.lang.reflect.Constructor;
+
 @Getter
 public class PageMeta {
 
@@ -20,7 +22,9 @@ public class PageMeta {
 
     @SneakyThrows
     public Page createNewPage() {
-        return pageClass.getConstructor().newInstance();
+        Constructor<? extends Page> constructor = pageClass.getConstructor();
+        constructor.setAccessible(true);
+        return constructor.newInstance();
     }
 
 

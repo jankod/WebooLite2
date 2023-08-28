@@ -14,10 +14,6 @@ public class AjaxResult implements Serializable {
 
     private final List<JsCommand> commands = new ArrayList<>();
 
-    public static AjaxResult alert(String message) {
-        return empty().addCommand(new AlertCommand(message));
-    }
-
     public static AjaxResult command(JsCommand command) {
         return empty().addCommand(command);
     }
@@ -44,5 +40,7 @@ public class AjaxResult implements Serializable {
         return new AjaxResult().addCommand(new LocationReplace(aClass));
     }
 
-
+    public static AjaxResult alert(String message) {
+        return empty().addCommand(new AlertCommand(message));
+    }
 }

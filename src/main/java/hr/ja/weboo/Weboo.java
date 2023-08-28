@@ -8,8 +8,6 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import spark.Spark;
 
-import java.util.UUID;
-
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
@@ -18,7 +16,7 @@ import static spark.Spark.staticFiles;
 @Getter
 public class Weboo {
 
-    private static PageManager pageManager = new PageManager();
+    private PageManager pageManager = new PageManager();
 
     public void start(int port) {
 
@@ -32,7 +30,7 @@ public class Weboo {
             String eventName = request.headers("Weboo_event_name");
             String pageId = request.headers("Weboo_page_id");
 
-            Context.setRequest(request, response, pageId, null);
+            Context.setCurrentContext(request, response, pageId, null);
             response.type("application/json");
 
 
@@ -49,18 +47,19 @@ public class Weboo {
         for (PageMeta pageMeta : pageManager.getAllPages()) {
             Spark.get(pageMeta.getPath(), (request, response) -> {
                 try {
-                    String pageId = UUID.randomUUID().toString();
-                    Context.setRequest(request, response, pageId, pageMeta);
 
+                    String pageId = WebooUtil.createPageId();
+
+                    Context.setCurrentContext(request, response, pageId, pageMeta);
                     Page newPage = pageMeta.createNewPage();
 
-
                     Layout layout = newPage.getLayout();
-
+                    if (layout == null) {
+                        layout = new DefaultLayout();
+                    }
 
                     String jsCommandCode = JsUtil.createJsCommandCodeDefinition(Context.getCurrentContext().getCommandDefinitions());
                     String jsEventsCode = JsUtil.createJsEventsCode(newPage.getWidgets());
-
 
                     layout.setLastBodyTag("""
                           <script>
@@ -96,6 +95,11 @@ public class Weboo {
 
 
     public static String getPath(Class<? extends Page> page) {
+        if (!pageManager.contains(page)) {
+            //pageManager.add(page);
+            throw new RuntimeException("Not add page " + page);
+        }
         return pageManager.getPath(page);
     }
+
 }

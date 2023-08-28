@@ -1,7 +1,6 @@
 package hr.ja.weboo.js;
 
 import lombok.Getter;
-import org.apache.commons.lang3.RandomStringUtils;
 
 @JavaScript("""
       console.log("Exe js custom code: ", this)
@@ -13,12 +12,12 @@ import org.apache.commons.lang3.RandomStringUtils;
           }
           return obj;
       }, {});
-            
+      
       return func.apply(result);
             
       """)
 @Getter
-public class CustomCodeCommand extends JsCommand {
+public class CustomJsCommand extends JsCommand {
 
     @JavaScriptParam
     private final String jsCode;
@@ -26,7 +25,12 @@ public class CustomCodeCommand extends JsCommand {
     @JavaScriptParam
     private String[] args;
 
-    public CustomCodeCommand(String jsCode, String... args) {
+    /**
+     *
+     * @param jsCode Js code
+     * @param args key, value parameters user inside js code
+     */
+    public CustomJsCommand(String jsCode, String... args) {
         this.jsCode = jsCode;
         this.args = args;
     }

@@ -4,10 +4,12 @@ import hr.ja.weboo.ClientEvent;
 import hr.ja.weboo.Context;
 import hr.ja.weboo.WebooUtil;
 import hr.ja.weboo.Widget;
-import hr.ja.weboo.components.Component;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class JsUtil {
 
@@ -30,23 +32,22 @@ public class JsUtil {
                 String handlerId = ServerHandler.register(e.getServerHandler(), Context.getPageId(), widgetId);
 
                 String jsonCommandData = WebooUtil.toJson(jsCommand);
+
+                //WebooJs.onEvent(widgetId, eventName, handlerId, jsCommand);
+
                 String template = """
-                       $("#{widgetId}").on("{eventName}", function (e) {
-                          const res =  weboo.exeCommand( {jsonCommandData.raw} );
-                          weboo.handleEventOnServer("{widgetId}", "{eventName}", "{handlerId}", res);
-                       });
-                       
+                      weboo.onEvent("{widgetId}", "{eventName}", "{handlerId}", {jsonCommandData.raw});
                       """;
-                js.append(WebooUtil.qute(template, Map.of(
-                      "widgetId", widgetId,
-                      "eventName", eventName,
-                      "jsonCommandData", jsonCommandData,
-                      "handlerId", handlerId
-                )));
+                js.append(WebooUtil.qute(template,
+                      Map.of(
+                            "widgetId", widgetId,
+                            "eventName", eventName,
+                            "jsonCommandData", jsonCommandData,
+                            "handlerId", handlerId)));
             }
 
-            if (widget instanceof Component) {
-                List<Widget> children = ((Component) widget).getChildren();
+            if (widget.hasChildren()) {
+                List<Widget> children = widget.getChildren();
                 createJsEventsCode(children);
             }
 
@@ -55,7 +56,9 @@ public class JsUtil {
 
     }
 
+
     public static String createJsCommandName(Class<? extends JsCommand> aClass) {
+
         return aClass.getName().replaceAll("[^a-zA-Z0-9_$]", "_");
     }
 
@@ -64,17 +67,14 @@ public class JsUtil {
         String code = c.getAnnotation(JavaScript.class).value();
         String commandName = createJsCommandName(c);
         String parameters = String.join(", ", findJsParameters(c));
+
         String template = """
               weboo.commands.{commandName} = function({parameters}) {
                 {code.raw}
               }
                                     
-              """; //.formatted(commandName, code));
-        return WebooUtil.qute(template, Map.of(
-              "commandName", commandName,
-              "parameters", parameters,
-              "code", code
-        ));
+              """;
+        return WebooUtil.qute(template, Map.of("commandName", commandName, "parameters", parameters, "code", code));
     }
 
     private static List<String> findJsParameters(Class<?> aClass) {

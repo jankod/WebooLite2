@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @JavaScript("""
-      window.location.replace(path);
+      window.location.replace(this.path);
       """)
 @Getter
 public class LocationReplace extends JsCommand {

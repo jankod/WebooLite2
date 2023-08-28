@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @JavaScript("""
-    alert(message);
+    alert(this.message);
 """)
 @RequiredArgsConstructor
 @Getter

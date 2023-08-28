@@ -1,6 +1,14 @@
 const weboo = {
     commands: {},
 
+    exeCommand(c) {
+        if (weboo.commands[c.name] == undefined) {
+            console.error("Cannot find command ", c);
+            alert("Cannot find command '" + c.name + "'");
+        }
+        return weboo.commands[c.name].apply(c);
+    },
+
     exeCommandsArray(data) {
         if (!Array.isArray(data)) {
             data = [data];
@@ -12,12 +20,16 @@ const weboo = {
 
     },
 
-    exeCommand(c) {
-        if (weboo.commands[c.name] == undefined) {
-            console.error("Cannot find command ", c);
-            alert("Cannot find command '" + c.name + "'");
-        }
-        return weboo.commands[c.name].apply(c);
+    handleAjaxResult(ajaxResult) {
+
+    },
+
+    onEvent(widgetId, eventName, handlerId, jsonCommandData) {
+        $("#" + widgetId).on(eventName, function (e) {
+            jsonCommandData.event = e;
+            const result = weboo.exeCommand(jsonCommandData);
+            weboo.handleEventOnServer(widgetId, eventName, handlerId, result);
+        });
     },
 
     handleEventOnServer(widgetId, eventName, handlerId, result) {
@@ -32,19 +44,19 @@ const weboo = {
             url: '/weboo/event',
             headers: headers,
             data: result
-        }).done(function (data, status) {
+        }).done(function (ajaxResult, status) {
                 if (status === "success") {
-                    if ($.isArray(data.commands)) {
-                        weboo.exeCommandsArray(data.commands)
+                    if ($.isArray(ajaxResult.commands)) {
+                        weboo.exeCommandsArray(ajaxResult.commands)
                     }
                     // TODO:: errors handle
                 }
-                console.log("headers status", data, status);
+                console.log("headers status", ajaxResult, status);
             }
         );
     },
 
-    form(formId) {
+    form(formId)  {
         $("#" + formId).on('submit', function (event) {
             event.preventDefault();
             event.stopPropagation();

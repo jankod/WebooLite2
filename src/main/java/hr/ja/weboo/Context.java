@@ -16,7 +16,7 @@ public class Context {
 
     private final ThreadLocal<CurrentContext> contextHolder = new ThreadLocal<>();
 
-    void setRequest(Request request, Response response, String pageId, PageMeta page) {
+    void setCurrentContext(Request request, Response response, String pageId, PageMeta page) {
         CurrentContext value = new CurrentContext(request, response, pageId, page);
         contextHolder.set(value);
     }

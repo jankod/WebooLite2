@@ -1,6 +1,7 @@
 package hr.ja.weboo.components;
 
 import hr.ja.weboo.WebooUtil;
+import hr.ja.weboo.Widget;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class Button extends Component {
+public class Button extends Widget {
 
     private String label;
 
@@ -24,7 +25,7 @@ public class Button extends Component {
               """;
 
         return WebooUtil.qute(t, Map.of(
-              "idClassAttr", this.getIdClassAttr(),
+              "idClassAttr", this.getIdClassStyleAttr(),
               "label", getLabel()
               //"handlerId", "????", // TODO: add real id
         ));

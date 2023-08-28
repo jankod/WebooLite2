@@ -24,6 +24,7 @@ public class DefaultLayout implements Layout {
     public String renderPage(Page page) {
 
 
+
         String body = WidgetUtil.pageToHtml(page);
 
         String template = """
@@ -31,6 +32,7 @@ public class DefaultLayout implements Layout {
               <html lang="{lang}">
                 {head.raw}
                 <body class='container'>
+                    <h1>default layout</h1>
                    {body.raw}
                    {lastBodyTag.raw}
                 </body>
@@ -53,12 +55,12 @@ public class DefaultLayout implements Layout {
                   <meta charset="utf-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1">
                   <link rel="icon" type="image/png" href="/weboo/favicon.png">
+                  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+                  
                   <title>{title}</title>
                   <script>
                     const WEBOO_PAGE_ID = "{pageId}";
                   </script>
-                  
-                  
                    {#for file in weboJavascriptFile}
                         <script src='/weboo/{file}'></script>
                    {/for}    
@@ -71,7 +73,6 @@ public class DefaultLayout implements Layout {
                           "title", page.getTitle(),
                           "pageId", Context.getPageId(),
                           "weboJavascriptFile", weboJavascriptFile
-
                     ));
     }
 }

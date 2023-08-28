@@ -11,8 +11,8 @@ public abstract class Page {
     @Getter
     private List<Widget> widgets = new ArrayList<>();
 
-    @Getter
-    private final String pageId = WebooUtil.pageNewId(getClass());
+    //@Getter
+    //private final String pageId = WebooUtil.pageNewId(getClass());
 
     @Getter
     @Setter
