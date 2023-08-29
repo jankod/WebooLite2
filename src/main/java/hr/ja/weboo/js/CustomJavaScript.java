@@ -17,11 +17,14 @@ import lombok.Getter;
             
       """)
 @Getter
-public class CustomJsCommand extends JsCommand {
+public class CustomJavaScript extends JavaScriptFunction {
 
     @JavaScriptParam
     private final String jsCode;
 
+    /**
+     * Key1, Value1, Key2, Value2, ...
+     */
     @JavaScriptParam
     private String[] args;
 
@@ -30,7 +33,7 @@ public class CustomJsCommand extends JsCommand {
      * @param jsCode Js code
      * @param args key, value parameters user inside js code
      */
-    public CustomJsCommand(String jsCode, String... args) {
+    public CustomJavaScript(String jsCode, String... args) {
         this.jsCode = jsCode;
         this.args = args;
     }

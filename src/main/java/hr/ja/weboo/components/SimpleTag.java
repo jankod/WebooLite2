@@ -1,5 +1,7 @@
-package hr.ja.weboo;
+package hr.ja.weboo.components;
 
+import hr.ja.weboo.WebooUtil;
+import hr.ja.weboo.Widget;
 import lombok.Getter;
 import lombok.Setter;
 

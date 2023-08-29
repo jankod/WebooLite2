@@ -1,5 +1,6 @@
 package hr.ja.weboo;
 
+import hr.ja.weboo.js.ClientEventCommand;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -22,7 +23,7 @@ public abstract class Widget {
 
     private String style = "";
 
-    private List<ClientEvent> clientEvents = new ArrayList<>();
+//    private List<ClientServerEvent> clientEvents = new ArrayList<>();
 
     private final List<Widget> children = new ArrayList<>(2);
 
@@ -48,9 +49,9 @@ public abstract class Widget {
     }
 
 
-    public ClientEvent on(String eventName) {
-        ClientEvent clientEvent = new ClientEvent(eventName, widgetId);
-        clientEvents.add(clientEvent);
+    public ClientServerEvent on(String eventName) {
+        ClientServerEvent clientEvent = new ClientServerEvent(eventName, widgetId);
+        ClientServerManager.add(clientEvent, Context.getPageId());
         return clientEvent;
     }
 

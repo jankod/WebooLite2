@@ -19,7 +19,7 @@ package hr.ja.weboo.js;
           }
       );
       """)
-public class SubmitFormCommand extends JsCommand {
+public class SubmitFormCommand extends JavaScriptFunction {
     private final String widgetId;
 
     public SubmitFormCommand(String widgetId) {

@@ -12,17 +12,18 @@ import java.util.Map;
 public class DefaultLayout implements Layout {
 
     @Setter
-    private String lastBodyTag;
+    private String lastBodyHtmlChunk;
 
-    private List<String> weboJavascriptFile = new ArrayList<>();
+    private List<String> javascriptFiles = new ArrayList<>();
+    private List<String> cssFiles = new ArrayList<>();
 
     public DefaultLayout() {
-        weboJavascriptFile.add("jquery-3.7.0.min.js");
-        weboJavascriptFile.add("weboo.js");
+        javascriptFiles.add("jquery-3.7.0.min.js");
+        javascriptFiles.add("weboo.js");
+
     }
 
     public String renderPage(Page page) {
-
 
 
         String body = WidgetUtil.pageToHtml(page);
@@ -43,7 +44,7 @@ public class DefaultLayout implements Layout {
               "head", head(page),
               "body", body,
               "lang", "en", // TODO: from config or???,
-              "lastBodyTag", lastBodyTag
+              "lastBodyTag", lastBodyHtmlChunk
         ));
     }
 
@@ -61,7 +62,7 @@ public class DefaultLayout implements Layout {
                   <script>
                     const WEBOO_PAGE_ID = "{pageId}";
                   </script>
-                   {#for file in weboJavascriptFile}
+                   {#for file in webooJavascriptFile}
                         <script src='/weboo/{file}'></script>
                    {/for}    
                 </head>
@@ -72,7 +73,7 @@ public class DefaultLayout implements Layout {
                     of(
                           "title", page.getTitle(),
                           "pageId", Context.getPageId(),
-                          "weboJavascriptFile", weboJavascriptFile
+                          "webooJavascriptFile", javascriptFiles
                     ));
     }
 }

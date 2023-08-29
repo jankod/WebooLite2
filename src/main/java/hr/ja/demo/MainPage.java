@@ -21,15 +21,17 @@ public class MainPage extends Page {
 
 
         btn.on("click")
-              .handleOnClient(new CustomJsCommand("""
+              .handleOnClient("""
                     console.log("Custom code param1 = ", this.param1 + " param2 ="+ this.param2);
                                           
-                      return {
+                    return {
                           "data1": "value11"
-                      }
-                      """, "param1", "value1", "param2", "value2"))
+                    }
+                     
+                      """, "param1", "value1", "param2", "value2")
 
               .handleOnServer(() -> {
+
                   WebooRequest req = Context.req();
 
                   String data1 = req.queryParams("data1");
@@ -51,7 +53,7 @@ public class MainPage extends Page {
         add(btn);
     }
 
-    private void register(Class<? extends JsCommand> commandClass) {
+    private void register(Class<? extends JavaScriptFunction> commandClass) {
         Context.register(commandClass);
     }
 

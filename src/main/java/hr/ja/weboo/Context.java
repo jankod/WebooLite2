@@ -1,6 +1,6 @@
 package hr.ja.weboo;
 
-import hr.ja.weboo.js.JsCommand;
+import hr.ja.weboo.js.JavaScriptFunction;
 import lombok.Data;
 import lombok.experimental.UtilityClass;
 import spark.Request;
@@ -50,11 +50,11 @@ public class Context {
         return contextHolder.get().pageMeta.getPageClass();
     }
 
-    public static void sendCommand(JsCommand jsCommand) {
+    public static void sendCommand(JavaScriptFunction jsCommand) {
 
     }
 
-    public static void register(Class<? extends JsCommand> commandClass) {
+    public static void register(Class<? extends JavaScriptFunction> commandClass) {
         CurrentContext context = contextHolder.get();
         if(context != null) {
             context.getCommandDefinitions().add(commandClass);
@@ -70,9 +70,9 @@ public class Context {
         private final String pageId;
         private final PageMeta pageMeta;
 
-        private final Set<Class<? extends JsCommand>> commandDefinitions = new HashSet<>();
+        private final Set<Class<? extends JavaScriptFunction>> commandDefinitions = new HashSet<>();
 
-        private final List<JsCommand> commandForSend = new ArrayList<>();
+        private final List<JavaScriptFunction> commandForSend = new ArrayList<>();
 
 
         CurrentContext(Request sparkRequest, Response sparkResponse, String pageId, PageMeta pageMeta) {

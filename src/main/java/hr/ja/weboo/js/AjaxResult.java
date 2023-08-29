@@ -12,14 +12,14 @@ public class AjaxResult implements Serializable {
 
     private final List<String> errors = new ArrayList<>();
 
-    private final List<JsCommand> commands = new ArrayList<>();
+    private final List<JavaScriptFunction> functions = new ArrayList<>();
 
-    public static AjaxResult command(JsCommand command) {
-        return empty().addCommand(command);
+    public static AjaxResult call(JavaScriptFunction func) {
+        return empty().add(func);
     }
 
-    public AjaxResult addCommand(JsCommand commnad) {
-        commands.add(commnad);
+    public AjaxResult add(JavaScriptFunction commnad) {
+        functions.add(commnad);
         return this;
     }
 
@@ -37,10 +37,10 @@ public class AjaxResult implements Serializable {
 
 
     public static AjaxResult goTo(Class<? extends Page> aClass) {
-        return new AjaxResult().addCommand(new LocationReplace(aClass));
+        return new AjaxResult().add(new LocationReplace(aClass));
     }
 
     public static AjaxResult alert(String message) {
-        return empty().addCommand(new AlertCommand(message));
+        return empty().add(new AlertCommand(message));
     }
 }

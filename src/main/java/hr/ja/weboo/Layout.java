@@ -2,7 +2,7 @@ package hr.ja.weboo;
 
 public interface Layout {
 
-    void setLastBodyTag(String html);
+    void setLastBodyHtmlChunk(String html);
 
     String renderPage(Page page);
 

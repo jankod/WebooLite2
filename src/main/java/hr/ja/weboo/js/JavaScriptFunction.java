@@ -10,11 +10,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Getter
-public abstract class JsCommand {
+public abstract class JavaScriptFunction {
 
     protected String name;
 
-    public JsCommand() {
+    public JavaScriptFunction() {
         name = JsUtil.createJsCommandName(getClass());
         Context.register(this.getClass());
     }

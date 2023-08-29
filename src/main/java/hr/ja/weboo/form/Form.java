@@ -1,10 +1,10 @@
 package hr.ja.weboo.form;
 
-import hr.ja.weboo.ClientEvent;
-import hr.ja.weboo.EventHandler;
+import hr.ja.weboo.ClientServerEvent;
+import hr.ja.weboo.ServerHandler;
 import hr.ja.weboo.WebooUtil;
 import hr.ja.weboo.Widget;
-import hr.ja.weboo.js.CustomJsCommand;
+import hr.ja.weboo.js.CustomJavaScript;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,10 +36,10 @@ public class Form extends Widget {
     }
 
     public void onSubmit(SubmitHandler handler) {
-        EventHandler h = () -> handler.submitForm(new FormData());
+        ServerHandler h = () -> handler.submitForm(new FormData());
 
-        ClientEvent clientEvent = on("submit");
-        clientEvent.handleOnClient(new CustomJsCommand("""
+        ClientServerEvent clientEvent = on("submit");
+        clientEvent.handleOnClient(new CustomJavaScript("""
               console.log(" this.",  this);
               this.event.preventDefault();
               this.event.stopPropagation();

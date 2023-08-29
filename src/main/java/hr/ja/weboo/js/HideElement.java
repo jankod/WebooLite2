@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
       """)
 @Getter
 @RequiredArgsConstructor
-public class HideElement extends JsCommand {
+public class HideElement extends JavaScriptFunction {
 
     @JavaScriptParam
     private final String eleId;

@@ -1,8 +1,10 @@
 package hr.ja.demo;
 
 import hr.ja.weboo.*;
+import hr.ja.weboo.components.Col;
 import hr.ja.weboo.components.H3;
 import hr.ja.weboo.components.Link;
+import hr.ja.weboo.components.Row;
 
 @Path("/users")
 public class UserListPage extends Page {

@@ -2,7 +2,6 @@ package hr.ja.weboo;
 
 import hr.ja.weboo.js.AjaxResult;
 import hr.ja.weboo.js.JsUtil;
-import hr.ja.weboo.js.ServerHandler;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +33,7 @@ public class Weboo {
             response.type("application/json");
 
 
-            EventHandler eventHandler = ServerHandler.get(handlerId, widgetId, pageId);
+            ServerHandler eventHandler = hr.ja.weboo.js.ServerHandler.get(handlerId, widgetId, pageId);
             if (eventHandler == null) {
                 log.error("Cannot find event handler!!!");
                 return WebooUtil.toJson(AjaxResult.alert("Error, cannot find event handler!"));
@@ -61,7 +60,7 @@ public class Weboo {
                     String jsCommandCode = JsUtil.createJsCommandCodeDefinition(Context.getCurrentContext().getCommandDefinitions());
                     String jsEventsCode = JsUtil.createJsEventsCode(newPage.getWidgets());
 
-                    layout.setLastBodyTag("""
+                    layout.setLastBodyHtmlChunk("""
                           <script>
                           // command definitions by widgets
                           %s

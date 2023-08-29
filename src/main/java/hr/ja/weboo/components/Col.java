@@ -1,8 +1,7 @@
-package hr.ja.weboo;
+package hr.ja.weboo.components;
 
 
-import hr.ja.weboo.components.JustText;
-import org.w3c.dom.Text;
+import hr.ja.weboo.Widget;
 
 public class Col extends SimpleTag {
 

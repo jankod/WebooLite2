@@ -1,24 +1,22 @@
 package hr.ja.weboo.js;
 
 import hr.ja.demo.User;
-import hr.ja.weboo.form.Form;
 import jakarta.validation.ConstraintViolation;
 
 import java.util.Set;
 
 public class WebooJs {
 
-    public static JsCommand onEvent(String widgetId, String eventName, String handlerId, JsCommand jsCommand) {
+    public static JavaScriptFunction onEvent(String widgetId, String eventName, String handlerId, JavaScriptFunction jsCommand) {
 
         return jsCommand;
     }
 
-    public static JsCommand submitFormCommand(Form form) {
-
-        return new SubmitFormCommand(form.getWidgetId());
+    public static JavaScriptFunction sendFormToServer(String formId, String jsCode) {
+        return new SubmitFormCommand(formId);
     }
 
-    public static JsCommand showValidationErrors(Set<ConstraintViolation<User>> violations, String widgetId) {
+    public static JavaScriptFunction showValidationErrors(Set<ConstraintViolation<User>> violations, String widgetId) {
         FormValidationErrorCommand c;
         return null;
     }
@@ -32,6 +30,6 @@ public class WebooJs {
                   });
               }
       """)
-class OnEventCommand extends JsCommand{
+class OnEventCommand extends JavaScriptFunction {
 
 }

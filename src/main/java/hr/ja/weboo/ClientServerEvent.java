@@ -1,0 +1,59 @@
+package hr.ja.weboo;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import hr.ja.weboo.js.CustomJavaScript;
+import hr.ja.weboo.js.JavaScriptFunction;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain = true)
+public class ClientServerEvent {
+
+    private final String eventName;
+
+    private final String widgetId;
+
+    /**
+     * event.preventDefault();
+     * event.stopPropagation();
+     */
+    private boolean stopPropagation = true;
+
+    @JsonIgnore
+    private ServerHandler serverHandler;
+
+    private JavaScriptFunction jsFunction;
+
+    public ClientServerEvent(String eventName, String widgetId) {
+        this.eventName = eventName;
+        this.widgetId = widgetId;
+        // napravi komandu za on eventName widgetId
+    }
+
+    public ClientServerEvent handleOnClient(JavaScriptFunction function) {
+        checkExistFunction();
+        this.jsFunction = function;
+        return this;
+    }
+
+    private void checkExistFunction() {
+        if(jsFunction != null) {
+            throw new RuntimeException("jsFunction exist!");
+        }
+    }
+
+    public ClientServerEvent handleOnClient(String jsCode, String... args) {
+        checkExistFunction();
+        this.jsFunction = new CustomJavaScript(jsCode, args);
+        return this;
+    }
+
+
+    public ClientServerEvent handleOnServer(ServerHandler handler) {
+        this.serverHandler = handler;
+        return this;
+    }
+
+
+}

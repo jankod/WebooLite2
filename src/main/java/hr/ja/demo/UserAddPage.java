@@ -2,14 +2,12 @@ package hr.ja.demo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import hr.ja.weboo.*;
+import hr.ja.weboo.ServerHandler;
 import hr.ja.weboo.components.AlertWidget;
 import hr.ja.weboo.components.H3;
 import hr.ja.weboo.components.SubmitButton;
 import hr.ja.weboo.form.*;
-import hr.ja.weboo.js.AjaxResult;
-import hr.ja.weboo.js.AlertCommand;
-import hr.ja.weboo.js.CustomJsCommand;
-import hr.ja.weboo.js.WebooJs;
+import hr.ja.weboo.js.*;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,34 +26,35 @@ public class UserAddPage extends Page {
         form.add(new SubmitButton("Save"));
 
         form.on("submit")
-              .handleOnClient(WebooJs.submitFormCommand(form))
+              .handleOnClient(new FormSubmitFunction(form))
               .handleOnServer(() -> {
                   try {
                       User user = Context.req().bindJsonTo(User.class);
 
                       Set<ConstraintViolation<User>> violations = WebooUtil.validate(user);
+
                       if (violations.isEmpty()) {
-                          return AjaxResult.command(new AlertCommand("Succesful"));
+                          return AjaxResult.call(new AlertCommand("Succesfull submitet form!"));
                       } else {
-                          return AjaxResult.command(WebooJs.showValidationErrors(violations, form.getWidgetId()));
+                          return AjaxResult.call(WebooJs.showValidationErrors(violations, form.getWidgetId()));
                       }
 
                   } catch (JsonProcessingException e) {
-                      return AjaxResult.command(new AlertCommand("Error json " + e.getMessage()));
+                      return AjaxResult.call(new AlertCommand("Error json " + e.getMessage()));
                   }
                   // validate and return
 
-              }).build();
+              });
 
         form.on("submit")
-              .handleOnClient(new CustomJsCommand("""
+              .handleOnClient(new CustomJavaScript("""
                        console.log("This {}", this);
                        
                     """)).
-              handleOnServer(new EventHandler() {
+              handleOnServer(new ServerHandler() {
                   @Override
                   public AjaxResult handle() {
-                      return AjaxResult.command(new AlertCommand("dela"));
+                      return AjaxResult.call(new AlertCommand("dela"));
                   }
               });
 

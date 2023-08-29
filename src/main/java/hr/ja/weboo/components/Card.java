@@ -1,5 +1,7 @@
-package hr.ja.weboo;
+package hr.ja.weboo.components;
 
+
+import hr.ja.weboo.Widget;
 
 import static hr.ja.weboo.WebooUtil.qute;
 import static java.util.Map.of;

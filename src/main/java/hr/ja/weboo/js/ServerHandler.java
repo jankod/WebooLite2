@@ -1,6 +1,5 @@
 package hr.ja.weboo.js;
 
-import hr.ja.weboo.EventHandler;
 import hr.ja.weboo.WebooUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,13 +13,13 @@ public class ServerHandler {
 
     private Map<String, HandlerWrapper> handlerMap = new HashMap<>();
 
-    public String register(EventHandler serverHandler, String pageId, String widgetId) {
+    public String register(hr.ja.weboo.ServerHandler serverHandler, String pageId, String widgetId) {
         String handlerId = WebooUtil.eventHandlerNewId(serverHandler.getClass());
         handlerMap.put(handlerId, new HandlerWrapper(serverHandler, handlerId, pageId, widgetId));
         return handlerId;
     }
 
-    public static EventHandler get(String handlerId, String widgetId, String pageId) {
+    public static hr.ja.weboo.ServerHandler get(String handlerId, String widgetId, String pageId) {
         if (!handlerMap.containsKey(handlerId)) {
             return null;
         }
@@ -37,7 +36,7 @@ public class ServerHandler {
 @Data
 @AllArgsConstructor
 class HandlerWrapper {
-    EventHandler eventHandler;
+    hr.ja.weboo.ServerHandler eventHandler;
     String handlerId;
     String pageId;
     String widgetId;

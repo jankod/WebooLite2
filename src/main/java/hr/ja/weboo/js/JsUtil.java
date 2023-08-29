@@ -1,9 +1,6 @@
 package hr.ja.weboo.js;
 
-import hr.ja.weboo.ClientEvent;
-import hr.ja.weboo.Context;
-import hr.ja.weboo.WebooUtil;
-import hr.ja.weboo.Widget;
+import hr.ja.weboo.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -13,7 +10,7 @@ import java.util.Map;
 
 public class JsUtil {
 
-    public static void checkCommand(Class<? extends JsCommand> c) {
+    public static void checkCommand(Class<? extends JavaScriptFunction> c) {
         if (c.getAnnotation(JavaScript.class) == null) {
             throw new RuntimeException("JsCommand " + c + " does not have JavaScript annotation");
         }
@@ -23,15 +20,15 @@ public class JsUtil {
         StringBuilder js = new StringBuilder();
 
         for (Widget widget : widgets) {
-            List<ClientEvent> clientEvents = widget.getClientEvents();
-            for (ClientEvent e : clientEvents) {
+
+            List<ClientServerEvent> clientEvents = widget.getClientEvents();
+            for (ClientServerEvent e : clientEvents) {
+                JavaScriptFunction function = e.getJsFunction();
+
                 String eventName = e.getEventName();
                 String widgetId = e.getWidgetId();
-                JsCommand jsCommand = e.getCommand();
-
                 String handlerId = ServerHandler.register(e.getServerHandler(), Context.getPageId(), widgetId);
-
-                String jsonCommandData = WebooUtil.toJson(jsCommand);
+                String jsonCommandData = WebooUtil.toJson(function);
 
                 //WebooJs.onEvent(widgetId, eventName, handlerId, jsCommand);
 
@@ -57,12 +54,12 @@ public class JsUtil {
     }
 
 
-    public static String createJsCommandName(Class<? extends JsCommand> aClass) {
+    public static String createJsCommandName(Class<? extends JavaScriptFunction> aClass) {
 
         return aClass.getName().replaceAll("[^a-zA-Z0-9_$]", "_");
     }
 
-    public static String createJsCommandCodeDefinition(Class<? extends JsCommand> c) {
+    public static String createJsCommandCodeDefinition(Class<? extends JavaScriptFunction> c) {
         JsUtil.checkCommand(c);
         String code = c.getAnnotation(JavaScript.class).value();
         String commandName = createJsCommandName(c);
@@ -88,9 +85,9 @@ public class JsUtil {
         return fieldsWithAnnotation;
     }
 
-    public static String createJsCommandCodeDefinition(Collection<Class<? extends JsCommand>> commandDefinitions) {
+    public static String createJsCommandCodeDefinition(Collection<Class<? extends JavaScriptFunction>> commandDefinitions) {
         StringBuilder js = new StringBuilder();
-        for (Class<? extends JsCommand> c : commandDefinitions) {
+        for (Class<? extends JavaScriptFunction> c : commandDefinitions) {
             js.append(createJsCommandCodeDefinition(c));
         }
         return js.toString();
