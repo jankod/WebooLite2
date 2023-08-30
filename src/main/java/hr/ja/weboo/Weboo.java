@@ -1,23 +1,35 @@
 package hr.ja.weboo;
 
 import hr.ja.weboo.js.AjaxResult;
+import hr.ja.weboo.js.JavaScriptFunction;
 import hr.ja.weboo.js.JsUtil;
+import hr.ja.weboo.js.ServerHandlerManager;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import spark.Spark;
+
+import java.util.Set;
 
 import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 @Slf4j
-@UtilityClass
 @Getter
+@UtilityClass
 public class Weboo {
 
-    private PageManager pageManager = new PageManager();
+    private boolean development = true;
 
     public void start(int port) {
+        final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        Class<? extends StackTraceElement> mainClass = stackTrace[1].getClass();
+
+        scanForPages(mainClass);
+        scanForFunctions(mainClass);
 
         Spark.port(port);
         staticFiles.location("/public"); // Static files;
@@ -33,7 +45,7 @@ public class Weboo {
             response.type("application/json");
 
 
-            ServerHandler eventHandler = hr.ja.weboo.js.ServerHandler.get(handlerId, widgetId, pageId);
+            ServerHandler eventHandler = ServerHandlerManager.get(handlerId, widgetId, pageId);
             if (eventHandler == null) {
                 log.error("Cannot find event handler!!!");
                 return WebooUtil.toJson(AjaxResult.alert("Error, cannot find event handler!"));
@@ -43,7 +55,7 @@ public class Weboo {
         });
 
 
-        for (PageMeta pageMeta : pageManager.getAllPages()) {
+        for (PageMeta pageMeta : PageManager.getAllPages()) {
             Spark.get(pageMeta.getPath(), (request, response) -> {
                 try {
 
@@ -58,7 +70,8 @@ public class Weboo {
                     }
 
                     String jsCommandCode = JsUtil.createJsCommandCodeDefinition(Context.getCurrentContext().getCommandDefinitions());
-                    String jsEventsCode = JsUtil.createJsEventsCode(newPage.getWidgets());
+
+                    String jsEventsCode = JsUtil.createJsEventsCode(PageSessionManager.getEvents(Context.getPageId()));
 
                     layout.setLastBodyHtmlChunk("""
                           <script>
@@ -88,17 +101,49 @@ public class Weboo {
         log.debug("http://localhost:" + port);
     }
 
-    public static void addPage(Class<? extends Page> clazz) {
-        pageManager.add(clazz);
+    private void scanForFunctions(Class<? extends StackTraceElement> mainClass) {
+        String packageName = mainClass.getPackage().getName();
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+              .setUrls(ClasspathHelper.forPackage(packageName)));
+        //.filterInputsBy(new FilterBuilder()
+        //    .includePackage(packageName)));
+
+        Set<Class<? extends JavaScriptFunction>> jsFounded = reflections.getSubTypesOf(JavaScriptFunction.class);
+        for (Class<? extends JavaScriptFunction> p : jsFounded) {
+            log.debug("Found {}", p);
+            addJavascript(p);
+        }
+    }
+
+    private void addJavascript(Class<? extends JavaScriptFunction> functionClass) {
+            JavaScriptManager.add(functionClass);
+    }
+
+    private void scanForPages(Class<? extends StackTraceElement> mainClass) {
+        String packageName = mainClass.getPackage().getName();
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+              .setUrls(ClasspathHelper.forPackage(packageName)));
+        //.filterInputsBy(new FilterBuilder()
+        //    .includePackage(packageName)));
+
+        Set<Class<? extends Page>> pagesFounded = reflections.getSubTypesOf(Page.class);
+        for (Class<? extends Page> p : pagesFounded) {
+            log.debug("Found {}", p);
+            PageManager.add(p);
+        }
+    }
+
+    public void addPage(Class<? extends Page> clazz) {
+        PageManager.add(clazz);
     }
 
 
-    public static String getPath(Class<? extends Page> page) {
-        if (!pageManager.contains(page)) {
+    public String getPath(Class<? extends Page> page) {
+        if (!PageManager.contains(page)) {
             //pageManager.add(page);
             throw new RuntimeException("Not add page " + page);
         }
-        return pageManager.getPath(page);
+        return PageManager.getPath(page);
     }
 
 }

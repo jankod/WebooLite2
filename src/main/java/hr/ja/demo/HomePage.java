@@ -9,15 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Path("/")
 @Slf4j
-public class MainPage extends Page {
+public class HomePage extends Page {
 
     Button btn = new Button("Klikni me user list page");
 
-    public MainPage() {
+    public HomePage() {
         setTitle("Main page");
 
-        register(AlertCommand.class);
-        register(LocationReplace.class);
+        registerFunction(AlertFunc.class);
+        registerFunction(LocationReplaceFunc.class);
 
 
         btn.on("click")
@@ -38,23 +38,21 @@ public class MainPage extends Page {
 
                   log.debug("Got data1 {}", data1);
 
-                  //return AjaxResult.command(new AlertCommand("Dobio ovo, data1 " + data1));
                   return AjaxResult.goTo(UserListPage.class);
-
-//                  return AjaxResult.command(new CustomJsCommand("""
-//                        alert("opvo dela");
-//                        """));
-
 
               });
 
         add(new H3("Main page"));
         add(new Link("User add", UserAddPage.class));
         add(btn);
+
+        call(new AlertFunc("Ovo je page"));
     }
 
-    private void register(Class<? extends JavaScriptFunction> commandClass) {
-        Context.register(commandClass);
+
+
+    private void registerFunction(Class<? extends JavaScriptFunction> func) {
+        PageSessionManager.register(func, Context.getPageId());
     }
 
 

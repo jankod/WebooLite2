@@ -1,9 +1,12 @@
 package hr.ja.weboo;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@UtilityClass
 class PageManager {
 
     private final List<PageMeta> pages = new ArrayList<>();

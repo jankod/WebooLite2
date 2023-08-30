@@ -16,8 +16,8 @@ public class Context {
 
     private final ThreadLocal<CurrentContext> contextHolder = new ThreadLocal<>();
 
-    void setCurrentContext(Request request, Response response, String pageId, PageMeta page) {
-        CurrentContext value = new CurrentContext(request, response, pageId, page);
+    void setCurrentContext(Request request, Response response, String pageId, PageMeta pageMeta) {
+        CurrentContext value = new CurrentContext(request, response, pageId, pageMeta);
         contextHolder.set(value);
     }
 
@@ -45,22 +45,12 @@ public class Context {
         return contextHolder.get();
     }
 
-
     public Class<? extends Page> getCurrentPage() {
         return contextHolder.get().pageMeta.getPageClass();
     }
 
     public static void sendCommand(JavaScriptFunction jsCommand) {
-
     }
-
-    public static void register(Class<? extends JavaScriptFunction> commandClass) {
-        CurrentContext context = contextHolder.get();
-        if(context != null) {
-            context.getCommandDefinitions().add(commandClass);
-        }
-    }
-
 
     @Data
     static final class CurrentContext {
@@ -69,11 +59,6 @@ public class Context {
         private final Response sparkResponse;
         private final String pageId;
         private final PageMeta pageMeta;
-
-        private final Set<Class<? extends JavaScriptFunction>> commandDefinitions = new HashSet<>();
-
-        private final List<JavaScriptFunction> commandForSend = new ArrayList<>();
-
 
         CurrentContext(Request sparkRequest, Response sparkResponse, String pageId, PageMeta pageMeta) {
             this.sparkRequest = sparkRequest;

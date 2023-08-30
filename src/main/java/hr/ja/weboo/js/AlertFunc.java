@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 """)
 @RequiredArgsConstructor
 @Getter
-public class AlertCommand extends JavaScriptFunction {
+public class AlertFunc extends JavaScriptFunction {
 
     @JavaScriptParam
     private final String message;

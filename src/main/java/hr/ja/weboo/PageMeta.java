@@ -19,7 +19,6 @@ public class PageMeta {
             path = pathAnno.value();
     }
 
-
     @SneakyThrows
     public Page createNewPage() {
         Constructor<? extends Page> constructor = pageClass.getConstructor();
@@ -27,12 +26,4 @@ public class PageMeta {
         return constructor.newInstance();
     }
 
-
-    public boolean isCurrent() {
-        Class<? extends Page> currentPage = Context.getCurrentPage();
-        if(currentPage != null) {
-            return currentPage.equals(pageClass);
-        }
-        return false;
-    }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -14,8 +15,10 @@ public class AjaxResult implements Serializable {
 
     private final List<JavaScriptFunction> functions = new ArrayList<>();
 
-    public static AjaxResult call(JavaScriptFunction func) {
-        return empty().add(func);
+    public static AjaxResult call(JavaScriptFunction... func) {
+        AjaxResult ar = empty();
+        ar.getFunctions().addAll(Arrays.asList(func));
+        return ar;
     }
 
     public AjaxResult add(JavaScriptFunction commnad) {
@@ -37,10 +40,10 @@ public class AjaxResult implements Serializable {
 
 
     public static AjaxResult goTo(Class<? extends Page> aClass) {
-        return new AjaxResult().add(new LocationReplace(aClass));
+        return new AjaxResult().add(new LocationReplaceFunc(aClass));
     }
 
     public static AjaxResult alert(String message) {
-        return empty().add(new AlertCommand(message));
+        return empty().add(new AlertFunc(message));
     }
 }

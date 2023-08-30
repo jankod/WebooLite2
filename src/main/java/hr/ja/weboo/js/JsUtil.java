@@ -16,39 +16,31 @@ public class JsUtil {
         }
     }
 
-    public static String createJsEventsCode(List<Widget> widgets) {
+    public static String createJsEventsCode(List<ClientServerEvent> clientServerEvents) {
         StringBuilder js = new StringBuilder();
 
-        for (Widget widget : widgets) {
+        for (ClientServerEvent e : clientServerEvents) {
+            JavaScriptFunction function = e.getJsFunction();
 
-            List<ClientServerEvent> clientEvents = widget.getClientEvents();
-            for (ClientServerEvent e : clientEvents) {
-                JavaScriptFunction function = e.getJsFunction();
+            String eventName = e.getEventName();
+            String widgetId = e.getWidgetId();
+            String handlerId = ServerHandlerManager.register(e.getServerHandler(), Context.getPageId(), widgetId);
+            String jsonCommandData = WebooUtil.toJson(function);
 
-                String eventName = e.getEventName();
-                String widgetId = e.getWidgetId();
-                String handlerId = ServerHandler.register(e.getServerHandler(), Context.getPageId(), widgetId);
-                String jsonCommandData = WebooUtil.toJson(function);
+            //WebooJs.onEvent(widgetId, eventName, handlerId, jsCommand);
 
-                //WebooJs.onEvent(widgetId, eventName, handlerId, jsCommand);
-
-                String template = """
-                      weboo.onEvent("{widgetId}", "{eventName}", "{handlerId}", {jsonCommandData.raw});
-                      """;
-                js.append(WebooUtil.qute(template,
-                      Map.of(
-                            "widgetId", widgetId,
-                            "eventName", eventName,
-                            "jsonCommandData", jsonCommandData,
-                            "handlerId", handlerId)));
-            }
-
-            if (widget.hasChildren()) {
-                List<Widget> children = widget.getChildren();
-                createJsEventsCode(children);
-            }
-
+            String template = """
+                  weboo.onEvent("{widgetId}", "{eventName}", "{handlerId}", {jsonCommandData.raw});
+                  """;
+            js.append(WebooUtil.qute(template,
+                  Map.of(
+                        "widgetId", widgetId,
+                        "eventName", eventName,
+                        "jsonCommandData", jsonCommandData,
+                        "handlerId", handlerId)));
         }
+
+
         return js.toString();
 
     }

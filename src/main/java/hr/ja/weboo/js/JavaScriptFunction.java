@@ -1,6 +1,7 @@
 package hr.ja.weboo.js;
 
 import hr.ja.weboo.Context;
+import hr.ja.weboo.PageSessionManager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +17,6 @@ public abstract class JavaScriptFunction {
 
     public JavaScriptFunction() {
         name = JsUtil.createJsCommandName(getClass());
-        Context.register(this.getClass());
+        //PageSessionManager.register(this.getClass());
     }
 }

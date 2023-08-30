@@ -14,7 +14,7 @@ public class UserListPage extends Page {
         setTitle("User list page");
 
         add(new H3("User list page"));
-        add(new Link("Main page", MainPage.class));
+        add(new Link("Main page", HomePage.class));
 
         Row row = new Row(
               new MyCol("col1"), new MyCol("col 2")

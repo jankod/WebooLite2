@@ -1,4 +1,4 @@
-package hr.ja.weboo.js;
+package hr.ja.weboo;
 
 import hr.ja.weboo.WebooUtil;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @UtilityClass
-public class ServerHandler {
+public class ServerHandlerManager {
 
     private Map<String, HandlerWrapper> handlerMap = new HashMap<>();
 
@@ -42,9 +42,6 @@ class HandlerWrapper {
     String widgetId;
 
     public boolean isSame(String widgetId, String pageId) {
-        if (this.widgetId.equals(widgetId) && this.pageId.equals(pageId)) {
-            return true;
-        }
-        return false;
+        return this.widgetId.equals(widgetId) && this.pageId.equals(pageId);
     }
 }

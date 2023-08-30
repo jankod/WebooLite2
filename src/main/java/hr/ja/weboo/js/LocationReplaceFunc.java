@@ -8,11 +8,11 @@ import lombok.Getter;
       window.location.replace(this.path);
       """)
 @Getter
-public class LocationReplace extends JavaScriptFunction {
+public class LocationReplaceFunc extends JavaScriptFunction {
 
     private final String path;
 
-    public LocationReplace(Class<? extends Page> page) {
+    public LocationReplaceFunc(Class<? extends Page> page) {
         path = Weboo.getPath(page);
     }
 

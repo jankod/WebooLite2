@@ -1,5 +1,7 @@
 package hr.ja.weboo;
 
+import hr.ja.weboo.js.CustomJavaScript;
+import hr.ja.weboo.js.JavaScriptFunction;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,5 +29,12 @@ public abstract class Page {
     public <T extends Widget> T add(T widget) {
         widgets.add(widget);
         return widget;
+    }
+
+    public void call(JavaScriptFunction function) {
+        PageSessionManager.add(function, Context.getPageId());
+    }
+    public void call(String jsCode, String... args) {
+        PageSessionManager.add(new CustomJavaScript(jsCode, args), Context.getPageId());
     }
 }

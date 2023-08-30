@@ -34,13 +34,13 @@ public class UserAddPage extends Page {
                       Set<ConstraintViolation<User>> violations = WebooUtil.validate(user);
 
                       if (violations.isEmpty()) {
-                          return AjaxResult.call(new AlertCommand("Succesfull submitet form!"));
+                          return AjaxResult.call(new AlertFunc("Succesfull submitet form!"));
                       } else {
                           return AjaxResult.call(WebooJs.showValidationErrors(violations, form.getWidgetId()));
                       }
 
                   } catch (JsonProcessingException e) {
-                      return AjaxResult.call(new AlertCommand("Error json " + e.getMessage()));
+                      return AjaxResult.call(new AlertFunc("Error json " + e.getMessage()));
                   }
                   // validate and return
 
@@ -54,7 +54,7 @@ public class UserAddPage extends Page {
               handleOnServer(new ServerHandler() {
                   @Override
                   public AjaxResult handle() {
-                      return AjaxResult.call(new AlertCommand("dela"));
+                      return AjaxResult.call(new AlertFunc("dela"));
                   }
               });
 

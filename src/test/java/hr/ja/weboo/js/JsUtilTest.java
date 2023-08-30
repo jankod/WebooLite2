@@ -29,9 +29,5 @@ class JsUtilTest {
     public static void main(String[] args) {
         Button b = new Button("pero");
 
-
-        String jsEventsCode = JsUtil.createJsEventsCode(Arrays.asList(b));
-        System.out.println(jsEventsCode);
-
     }
 }

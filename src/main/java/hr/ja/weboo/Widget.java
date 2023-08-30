@@ -1,6 +1,5 @@
 package hr.ja.weboo;
 
-import hr.ja.weboo.js.ClientEventCommand;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -16,14 +15,11 @@ import java.util.Map;
 @Slf4j
 public abstract class Widget {
 
-
     private String widgetId = WebooUtil.wigetNewId(this.getClass());
 
     private String classes = "";
 
     private String style = "";
-
-//    private List<ClientServerEvent> clientEvents = new ArrayList<>();
 
     private final List<Widget> children = new ArrayList<>(2);
 
@@ -51,7 +47,7 @@ public abstract class Widget {
 
     public ClientServerEvent on(String eventName) {
         ClientServerEvent clientEvent = new ClientServerEvent(eventName, widgetId);
-        ClientServerManager.add(clientEvent, Context.getPageId());
+        PageSessionManager.add(clientEvent, Context.getPageId());
         return clientEvent;
     }
 
