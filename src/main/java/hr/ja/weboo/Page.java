@@ -1,5 +1,6 @@
 package hr.ja.weboo;
 
+import hr.ja.weboo.components.Pre;
 import hr.ja.weboo.js.CustomJavaScript;
 import hr.ja.weboo.js.JavaScriptFunction;
 import lombok.Getter;
@@ -36,5 +37,12 @@ public abstract class Page {
     }
     public void call(String jsCode, String... args) {
         PageSessionManager.add(new CustomJavaScript(jsCode, args), Context.getPageId());
+    }
+
+
+    public void dump(Object u) {
+        String json = WebooUtil.toJson(u);
+        add(new Pre(json));
+
     }
 }

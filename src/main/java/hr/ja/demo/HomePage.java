@@ -16,9 +16,6 @@ public class HomePage extends Page {
     public HomePage() {
         setTitle("Main page");
 
-        registerFunction(AlertFunc.class);
-        registerFunction(LocationReplaceFunc.class);
-
 
         btn.on("click")
               .handleOnClient("""
@@ -38,7 +35,7 @@ public class HomePage extends Page {
 
                   log.debug("Got data1 {}", data1);
 
-                  return AjaxResult.goTo(UserListPage.class);
+                  return new AjaxResult().goTo(UserListPage.class);
 
               });
 
@@ -47,12 +44,6 @@ public class HomePage extends Page {
         add(btn);
 
         call(new AlertFunc("Ovo je page"));
-    }
-
-
-
-    private void registerFunction(Class<? extends JavaScriptFunction> func) {
-        PageSessionManager.register(func, Context.getPageId());
     }
 
 

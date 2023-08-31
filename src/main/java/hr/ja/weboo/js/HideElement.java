@@ -19,7 +19,7 @@ public class HideElement extends JavaScriptFunction {
         HideElement command = new HideElement("22");
         System.out.println(WebooUtil.toJson(command));
 
-        String code = JsUtil.createJsCommandCodeDefinition(HideElement.class);
+        String code = JsUtil.createJsFunctionCodeDefinition(HideElement.class);
         System.out.println("---------------");
         System.out.println(code);
     }

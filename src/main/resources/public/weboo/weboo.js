@@ -1,35 +1,46 @@
 const weboo = {
-    commands: {},
+    functions: {},
 
-    exeCommand(c) {
-        if (weboo.commands[c.name] == undefined) {
-            console.error("Cannot find command ", c);
-            alert("Cannot find command '" + c.name + "'");
+    exeFunction(c) {
+        if (weboo.functions[c.name] == undefined) {
+            console.error("Cannot find function ", c);
+            alert("Cannot find cuntion '" + c.name + "'");
         }
-        return weboo.commands[c.name].apply(c);
+        return weboo.functions[c.name].apply(c);
     },
 
-    exeCommandsArray(data) {
+    exeFuntionArray(data) {
         if (!Array.isArray(data)) {
             data = [data];
         }
         for (let num in data) {
             const c = data[num]
-            this.exeCommand(c);
+            this.exeFunction(c);
         }
-
     },
 
     handleAjaxResult(ajaxResult) {
 
     },
 
-    onEvent(widgetId, eventName, handlerId, jsonCommandData) {
-        $("#" + widgetId).on(eventName, function (e) {
-            jsonCommandData.event = e;
-            const result = weboo.exeCommand(jsonCommandData);
+    onEvent(widgetId, eventName, handlerId, funcCall) {
+        $("#" + widgetId).on(eventName, function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            funcCall.event = event;
+            const result = weboo.exeFunction(funcCall);
             weboo.handleEventOnServer(widgetId, eventName, handlerId, result);
         });
+    },
+
+    convertFormToJSON(formId) {
+        return $("#" + formId)
+            .serializeArray()
+            .reduce(function (json, {name, value}) {
+                json[name] = value;
+                return json;
+            }, {});
     },
 
     handleEventOnServer(widgetId, eventName, handlerId, result) {
@@ -39,6 +50,7 @@ const weboo = {
             Weboo_event_name: eventName,
             Weboo_page_id: WEBOO_PAGE_ID
         }
+        console.log("saljem na server ", result);
         $.ajax({
             method: 'POST',
             url: '/weboo/event',
@@ -46,17 +58,27 @@ const weboo = {
             data: result
         }).done(function (ajaxResult, status) {
                 if (status === "success") {
-                    if ($.isArray(ajaxResult.commands)) {
-                        weboo.exeCommandsArray(ajaxResult.commands)
+                    if ($.isArray(ajaxResult.functions)) {
+                        weboo.exeFuntionArray(ajaxResult.functions)
+                    } else {
+                        // TODO check errors!!!
+                        console.warn("Got ajax result ???: ", ajaxResult);
                     }
-                    // TODO:: errors handle
+                } else {
+                    console.warn("ajax status: " + status);
                 }
                 console.log("headers status", ajaxResult, status);
             }
         );
-    },
+    }
+    ,
 
-    form(formId)  {
+    sendForm(formId) {
+
+    }
+    ,
+
+    form(formId) {
         $("#" + formId).on('submit', function (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -102,8 +124,8 @@ const weboo = {
 
                     });
                 }
-                if (res.commands) {
-                    weboo.exeCommands(res);
+                if (res.functions) {
+                    weboo.exeFunction(res);
                 }
 
             }).fail(function (err) {
@@ -119,7 +141,7 @@ const weboo = {
 }
 
 // weboo = {}
-// weboo.commands = {}
+// weboo.functions = {}
 
 
 // weboo.exeCommands = function (data) {
@@ -128,7 +150,7 @@ const weboo = {
 //     }
 //     for (let num in data) {
 //         const c = data[num]
-//         weboo.commands[c.name].apply(c)
+//         weboo.functions[c.name].apply(c)
 //     }
 //
 // }

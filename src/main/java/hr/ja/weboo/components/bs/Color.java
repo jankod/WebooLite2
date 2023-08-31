@@ -13,4 +13,8 @@ public enum Color {
     public String toCssClass() {
         return "btn-" + this.name().toLowerCase();
     }
+
+    public String toName() {
+        return this.name().toLowerCase();
+    }
 }

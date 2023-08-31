@@ -24,7 +24,7 @@
 
 <script>
     console.log("last body");
-    weboo.commands.hr_ja_weboo_js_CustomCodeCommand = function (jsCode, arguments) {
+    weboo.functions.hr_ja_weboo_js_CustomCodeCommand = function (jsCode, arguments) {
         console.log("Exe js custom code: ", this.jsCode)
         const func = new Function(this.jsCode);
         func.apply(arguments);

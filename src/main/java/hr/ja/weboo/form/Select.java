@@ -2,6 +2,8 @@ package hr.ja.weboo.form;
 
 import hr.ja.weboo.Context;
 import hr.ja.weboo.WebooUtil;
+import hr.ja.weboo.WidgetUtil;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +15,12 @@ public class Select extends FormFieldWidget {
 
     private boolean multiselect = false;
 
-    public Select(String fieldName, String label, String... keyValuies) {
+    public Select(String fieldName, String label, Object... keyValues) {
         this.name = fieldName;
         this.label = label;
-        for (Object keyAndValue : keyValuies) {
-            options.add(new Option(keyAndValue.toString(), keyAndValue.toString(), false));
+
+        for (Pair<Object, Object> pair : WidgetUtil.toPairs(keyValues)) {
+            options.add(new Option(pair.getKey().toString(), pair.getValue().toString(), false));
         }
     }
 
@@ -73,11 +76,12 @@ public class Select extends FormFieldWidget {
     }
 
 
-    public Option addOption(String key, String value) {
-        Option o = new Option(key, value, false);
+    public Option addOption(Object key, String value) {
+        Option o = new Option(key.toString(), value, false);
         addOption(o);
         return o;
     }
+
     public void addOption(Option option) {
         this.options.add(option);
     }

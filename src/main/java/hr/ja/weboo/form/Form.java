@@ -20,9 +20,7 @@ public class Form extends Widget {
         // language=HTML
         String template = """
               <form {attr.raw} method='post' >
-                   {#for c in children}
-                      {c}
-                   {/for}
+                {children.raw}
               </form>
               <script>
               //  weboo.form('{id}');
@@ -31,13 +29,12 @@ public class Form extends Widget {
 
         return WebooUtil.qute(template, Map.of(
               "id", this.getWidgetId(),
-              "children", getChildren(),
+              "children",toChildrenHtml(),
               "attr", getIdClassStyleAttr()));
     }
 
     public void onSubmit(SubmitHandler handler) {
         ServerHandler h = () -> handler.submitForm(new FormData());
-
         ClientServerEvent clientEvent = on("submit");
         clientEvent.handleOnClient(new CustomJavaScript("""
               console.log(" this.",  this);

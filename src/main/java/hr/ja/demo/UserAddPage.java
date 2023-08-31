@@ -1,10 +1,12 @@
 package hr.ja.demo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import hr.ja.demo.model.Role;
+import hr.ja.demo.model.User;
 import hr.ja.weboo.*;
-import hr.ja.weboo.ServerHandler;
 import hr.ja.weboo.components.AlertWidget;
 import hr.ja.weboo.components.H3;
+import hr.ja.weboo.components.Link;
 import hr.ja.weboo.components.SubmitButton;
 import hr.ja.weboo.form.*;
 import hr.ja.weboo.js.*;
@@ -19,47 +21,50 @@ public class UserAddPage extends Page {
 
     public UserAddPage() {
         Form form = new Form();
-        AlertWidget alertWidget = new AlertWidget();
-        form.add(alertWidget);
         form.add(new TextField(User.Fields.name, "Name"));
+        Select selectRole = new Select(User.Fields.role, "Role");
+        AlertWidget message = new AlertWidget("");
 
-        form.add(new SubmitButton("Save"));
+        selectRole.addOption("null", "Select one")
+              .setSelected(true)
+              .setDisable(true);
+        selectRole.addOption(Role.ADMIN, "Admin");
+        selectRole.addOption(Role.USER, "User");
+
+        form.add(selectRole);
+
+        form.add(new SubmitButton("Save new user"));
 
         form.on("submit")
-              .handleOnClient(new FormSubmitFunction(form))
+              .handleOnClient(new SendFormFunction(form))
               .handleOnServer(() -> {
                   try {
                       User user = Context.req().bindJsonTo(User.class);
+                      log.debug("Got user {}", user);
 
                       Set<ConstraintViolation<User>> violations = WebooUtil.validate(user);
 
                       if (violations.isEmpty()) {
-                          return AjaxResult.call(new AlertFunc("Succesfull submitet form!"));
+                          user.save();
+
+                          return new AjaxResult()
+                                .alert("Jeee")
+                                .call(message.callShowMessage("Uspjesno si unio!"))
+                                //.goTo(UserAddPage.class);
+                          ;
                       } else {
-                          return AjaxResult.call(WebooJs.showValidationErrors(violations, form.getWidgetId()));
+                          return new AjaxResult().call(new ShowValidationErrorsFunction(violations, form.getWidgetId()));
                       }
 
                   } catch (JsonProcessingException e) {
-                      return AjaxResult.call(new AlertFunc("Error json " + e.getMessage()));
-                  }
-                  // validate and return
-
-              });
-
-        form.on("submit")
-              .handleOnClient(new CustomJavaScript("""
-                       console.log("This {}", this);
-                       
-                    """)).
-              handleOnServer(new ServerHandler() {
-                  @Override
-                  public AjaxResult handle() {
-                      return AjaxResult.call(new AlertFunc("dela"));
+                      return new AjaxResult().call(new AlertFunc("Error json: " + e.getMessage()));
                   }
               });
-
 
         add(new H3("Add user"));
+        add(message);
         add(form);
+
+        add(new Link("List user", UserListPage.class));
     }
 }

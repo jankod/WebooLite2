@@ -12,7 +12,7 @@ public class JsUtil {
 
     public static void checkCommand(Class<? extends JavaScriptFunction> c) {
         if (c.getAnnotation(JavaScript.class) == null) {
-            throw new RuntimeException("JsCommand " + c + " does not have JavaScript annotation");
+            throw new RuntimeException("JsCommand " + c + " does not have JavaScript annotation.");
         }
     }
 
@@ -25,18 +25,18 @@ public class JsUtil {
             String eventName = e.getEventName();
             String widgetId = e.getWidgetId();
             String handlerId = ServerHandlerManager.register(e.getServerHandler(), Context.getPageId(), widgetId);
-            String jsonCommandData = WebooUtil.toJson(function);
+            String funcCall = WebooUtil.toJson(function);
 
             //WebooJs.onEvent(widgetId, eventName, handlerId, jsCommand);
 
             String template = """
-                  weboo.onEvent("{widgetId}", "{eventName}", "{handlerId}", {jsonCommandData.raw});
+                  weboo.onEvent("{widgetId}", "{eventName}", "{handlerId}", {funcCall.raw});
                   """;
             js.append(WebooUtil.qute(template,
                   Map.of(
                         "widgetId", widgetId,
                         "eventName", eventName,
-                        "jsonCommandData", jsonCommandData,
+                        "funcCall", funcCall,
                         "handlerId", handlerId)));
         }
 
@@ -46,24 +46,23 @@ public class JsUtil {
     }
 
 
-    public static String createJsCommandName(Class<? extends JavaScriptFunction> aClass) {
-
+    public static String createJsFunctionName(Class<? extends JavaScriptFunction> aClass) {
         return aClass.getName().replaceAll("[^a-zA-Z0-9_$]", "_");
     }
 
-    public static String createJsCommandCodeDefinition(Class<? extends JavaScriptFunction> c) {
+    public static String createJsFunctionCodeDefinition(Class<? extends JavaScriptFunction> c) {
         JsUtil.checkCommand(c);
         String code = c.getAnnotation(JavaScript.class).value();
-        String commandName = createJsCommandName(c);
-        String parameters = String.join(", ", findJsParameters(c));
+        String functionName = createJsFunctionName(c);
+        //String parameters = String.join(", ", findJsParameters(c));
 
         String template = """
-              weboo.commands.{commandName} = function({parameters}) {
+              weboo.functions.{functionName} = function() {
                 {code.raw}
               }
                                     
               """;
-        return WebooUtil.qute(template, Map.of("commandName", commandName, "parameters", parameters, "code", code));
+        return WebooUtil.qute(template, Map.of("functionName", functionName, "code", code));
     }
 
     private static List<String> findJsParameters(Class<?> aClass) {
@@ -77,10 +76,10 @@ public class JsUtil {
         return fieldsWithAnnotation;
     }
 
-    public static String createJsCommandCodeDefinition(Collection<Class<? extends JavaScriptFunction>> commandDefinitions) {
+    public static String createJsFunctionCodeDefinition(Collection<Class<? extends JavaScriptFunction>> commandDefinitions) {
         StringBuilder js = new StringBuilder();
         for (Class<? extends JavaScriptFunction> c : commandDefinitions) {
-            js.append(createJsCommandCodeDefinition(c));
+            js.append(createJsFunctionCodeDefinition(c));
         }
         return js.toString();
     }

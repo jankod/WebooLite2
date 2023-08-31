@@ -37,7 +37,7 @@ public class SimpleTag extends Widget {
     public String toHtml() {
 
         String template = """
-                <{tag} id="{attr.raw}" {attributes.raw}>
+                <{tag} {attr.raw} {attributes.raw} >
                       {text}
                       {children.raw}
                     </{tag}>

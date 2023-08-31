@@ -21,9 +21,9 @@ public class PageMeta {
 
     @SneakyThrows
     public Page createNewPage() {
-        Constructor<? extends Page> constructor = pageClass.getConstructor();
-        constructor.setAccessible(true);
-        return constructor.newInstance();
+        Constructor<? extends Page> declaredConstructor = pageClass.getDeclaredConstructor();
+        declaredConstructor.setAccessible(true);
+        return declaredConstructor.newInstance();
     }
 
 }

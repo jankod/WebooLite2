@@ -4,10 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Getter
 @Setter
@@ -65,14 +68,26 @@ public abstract class Widget {
 
     protected String getIdClassStyleAttr() {
 
-        return WebooUtil.qute("""
-                    id="{id}" class="{class}" style="{style}"
-                    """, Map.of(
-                    "id", getWidgetId(),
-                    "class", getClasses(),
-                    "style", getStyle()
-              )
-        );
+        return paramValue("id", getWidgetId())
+               + paramValue("class", getClasses())
+               + paramValue("style", getStyle());
+
+
+//        return WebooUtil.qute("""
+//                    id="{id}" class="{class}" style="{style}"
+//                    """, Map.of(
+//                    "id", getWidgetId(),
+//                    "class", getClasses(),
+//                    "style", getStyle()
+//              )
+//        );
+    }
+
+    private String paramValue(String param, String value) {
+        if (isBlank(value)) {
+            return "";
+        }
+        return "%s=\"%s\" ".formatted(param, value);
     }
 
 
