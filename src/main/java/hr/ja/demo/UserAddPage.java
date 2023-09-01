@@ -4,10 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import hr.ja.demo.model.Role;
 import hr.ja.demo.model.User;
 import hr.ja.weboo.*;
-import hr.ja.weboo.components.AlertWidget;
-import hr.ja.weboo.components.H3;
-import hr.ja.weboo.components.Link;
-import hr.ja.weboo.components.SubmitButton;
+import hr.ja.weboo.components.*;
+import hr.ja.weboo.components.bs.Color;
 import hr.ja.weboo.form.*;
 import hr.ja.weboo.js.*;
 import jakarta.validation.ConstraintViolation;
@@ -23,7 +21,7 @@ public class UserAddPage extends Page {
         Form form = new Form();
         form.add(new TextField(User.Fields.name, "Name"));
         Select selectRole = new Select(User.Fields.role, "Role");
-        AlertWidget message = new AlertWidget("");
+        AlertWidget message = new AlertWidget("", Color.INFO);
 
         selectRole.addOption("null", "Select one")
               .setSelected(true)

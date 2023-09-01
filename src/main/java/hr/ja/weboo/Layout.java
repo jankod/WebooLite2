@@ -6,7 +6,4 @@ public interface Layout {
 
     String renderPage(Page page);
 
-
-
-
 }

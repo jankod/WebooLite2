@@ -10,15 +10,20 @@ import lombok.Setter;
 
 import java.util.Map;
 
+@Getter
 public class AlertWidget extends Widget {
 
-    @Setter
-    @Getter
-    private Color color = Color.INFO;
+    private final String message;
 
-    public AlertWidget(String message) {
-        addClass("alert  alert-dismissible fade show alert" + color.toName());
+    @Setter
+    private Color color;
+
+    public AlertWidget(String message, Color color) {
+        this.message = message;
+        this.color = color;
+        addClass("alert alert-dismissible fade show alert-" + color.toName());
         add(new HtmlWidget(message));
+
     }
 
     @Override
