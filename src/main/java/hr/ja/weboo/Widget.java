@@ -94,4 +94,8 @@ public abstract class Widget {
     public boolean hasChildren() {
         return !children.isEmpty();
     }
+
+    public void hiden() {
+        addClass("d-none");
+    }
 }

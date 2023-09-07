@@ -31,7 +31,7 @@ public class CustomJavaScript extends JavaScriptFunction {
     /**
      *
      * @param jsCode Js code
-     * @param args key, value parameters user inside js code
+     * @param args key1, value1, key2... parameters user inside js code with this.key1.
      */
     public CustomJavaScript(String jsCode, String... args) {
         this.jsCode = jsCode;

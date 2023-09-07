@@ -18,6 +18,11 @@ public class AlertWidget extends Widget {
     @Setter
     private Color color;
 
+    public AlertWidget(String message) {
+        this.message = message;
+        this.color = Color.INFO;
+
+    }
     public AlertWidget(String message, Color color) {
         this.message = message;
         this.color = color;

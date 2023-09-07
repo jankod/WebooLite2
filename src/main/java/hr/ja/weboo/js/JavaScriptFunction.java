@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 /**
- * event name i present
+ * js name create
  */
 @Slf4j
 @Getter

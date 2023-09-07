@@ -21,7 +21,7 @@ public class UserAddPage extends Page {
         Form form = new Form();
         form.add(new TextField(User.Fields.name, "Name"));
         Select selectRole = new Select(User.Fields.role, "Role");
-        AlertWidget message = new AlertWidget("", Color.INFO);
+        Div messagePlaceholder = new Div();
 
         selectRole.addOption("null", "Select one")
               .setSelected(true)
@@ -47,7 +47,8 @@ public class UserAddPage extends Page {
 
                           return new AjaxResult()
                                 .alert("Jeee")
-                                .call(message.callShowMessage("Uspjesno si unio!"))
+                                .call(new ShowHtmlFunction(new AlertWidget("poruka"), messagePlaceholder.getWidgetId()))
+                                //.call(message.callShowMessage("Uspjesno si unio!"))
                                 //.goTo(UserAddPage.class);
                           ;
                       } else {
@@ -60,7 +61,7 @@ public class UserAddPage extends Page {
               });
 
         add(new H3("Add user"));
-        add(message);
+        add(messagePlaceholder);
         add(form);
 
         add(new Link("List user", UserListPage.class));
