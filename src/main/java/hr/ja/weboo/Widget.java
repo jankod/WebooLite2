@@ -16,7 +16,7 @@ import static org.apache.commons.lang3.StringUtils.*;
 @Setter
 @Accessors(chain = true)
 @Slf4j
-public abstract class Widget {
+public abstract class Widget extends TemplateWidgetUtil {
 
     private String widgetId = WebooUtil.wigetNewId(this.getClass());
 

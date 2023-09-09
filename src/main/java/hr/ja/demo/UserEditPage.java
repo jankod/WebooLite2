@@ -12,7 +12,7 @@ public class UserEditPage extends Page {
 
     UserEditPage() {
         setTitle("User edit");
-        setLayout(new DefaultLayout());
+       // setLayout(new DefaultLayout());
 
         String id = Context.req().queryParams("userId");
         User u = User.findById(Long.valueOf(id));

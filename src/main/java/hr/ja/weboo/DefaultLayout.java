@@ -33,7 +33,7 @@ public class DefaultLayout implements Layout {
               <html lang="{lang}">
                 {head.raw}
                 <body class='container'>
-                    <h1>default layout</h1>
+                    <h1>Default layout</h1>
                    {body.raw}
                    {lastBodyTag.raw}
                 </body>

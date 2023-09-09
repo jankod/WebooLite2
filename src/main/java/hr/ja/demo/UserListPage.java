@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class UserListPage extends Page {
 
     public UserListPage() {
-        setLayout(new DefaultLayout());
+        //setLayout(new DefaultLayout());
 
         setTitle("User list page");
 

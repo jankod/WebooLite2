@@ -12,6 +12,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.net.URL;
 import java.text.MessageFormat;
@@ -57,17 +58,48 @@ public class WebooUtil {
 
 
     public static String qute(String template, Object... params) {
-        Qute.Fmt fmt = Qute.fmt(template);
-        fmt.variant(Variant.forContentType(Variant.TEXT_HTML));
-        return fmt.dataArray(params)
-              .render();
+        try {
+            Qute.Fmt fmt = Qute.fmt(template);
+            fmt.variant(Variant.forContentType(Variant.TEXT_HTML));
+            return fmt.dataArray(params)
+                  .render();
+        } catch (TemplateException e) {
+            String templateWithLineNumbers = addLineNumbers(template);
+            log.debug("Error " + e.getMessage());
+            log.debug(templateWithLineNumbers);
+            ExceptionUtils.rethrow(e);
+            return "Error: " + e.getMessage();
+        }
+
 
     }
 
     public static String qute(String template, Map<String, Object> map) {
         Qute.Fmt fmt = Qute.fmt(template);
         fmt.variant(Variant.forContentType(Variant.TEXT_HTML));
-        return fmt.dataMap(map).render();
+        try {
+            return fmt.dataMap(map).render();
+        } catch (TemplateException e) {
+            String templateWithLineNumbers = addLineNumbers(template);
+            TemplateException cause = e;
+            if (ExceptionUtils.hasCause(e, TemplateException.class)) {
+                if (e.getCause() != null)
+                    cause = (TemplateException) e.getCause();
+            }
+            log.debug("Error " + cause.getMessage() + " ");
+            log.debug(templateWithLineNumbers);
+            ExceptionUtils.rethrow(e);
+        }
+        return template;
+    }
+
+    private static String addLineNumbers(String template) {
+        String[] lines = template.split("\n");
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < lines.length; i++) {
+            result.append(i + 1).append(". ").append(lines[i]).append("\n");
+        }
+        return result.toString();
     }
 
     /**

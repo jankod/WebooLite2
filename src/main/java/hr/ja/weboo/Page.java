@@ -19,7 +19,7 @@ public abstract class Page {
 
     @Getter
     @Setter
-    private Layout layout = new DefaultLayout();
+    private Layout layout = null;
 
     @Setter
     @Getter

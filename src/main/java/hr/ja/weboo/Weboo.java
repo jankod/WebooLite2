@@ -4,6 +4,7 @@ import hr.ja.weboo.js.AjaxResult;
 import hr.ja.weboo.js.JavaScriptFunction;
 import hr.ja.weboo.js.JsUtil;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
@@ -25,6 +26,9 @@ import static spark.Spark.staticFiles;
 public class Weboo {
 
     private boolean development = true;
+
+    @Setter
+    private Class<? extends Layout> defaultLayout = DefaultLayout.class;
 
     public void start(int port) {
 
@@ -67,7 +71,10 @@ public class Weboo {
                     Page newPage = pageMeta.createNewPage();
 
                     Layout layout = newPage.getLayout();
-                    if (layout == null) {
+                    if (layout == null && defaultLayout != null) {
+                        layout = defaultLayout.getConstructor().newInstance();
+                    }
+                    if(layout == null) {
                         layout = new DefaultLayout();
                     }
 
