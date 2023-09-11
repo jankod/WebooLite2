@@ -1,16 +1,26 @@
 package hr.ja.weboo.adminlte4;
 
 import hr.ja.weboo.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Getter
+@Setter
 public class AdminLte4Layout implements Layout {
 
     private List<String> javascriptFiles = new ArrayList<>();
     private List<String> cssFiles = new ArrayList<>();
     private String lastBodyHtmlChunk;
+
+
+    protected Footer footer = new Footer();
+    protected Sidenav sidenav = new Sidenav();
+    protected Topbar topbar = new Topbar();
+    protected Head head = new Head("");
 
     @Override
     public void setLastBodyHtmlChunk(String lastBodyHtmlChunk) {
@@ -24,14 +34,15 @@ public class AdminLte4Layout implements Layout {
         javascriptFiles.add("/weboo/weboo.js");
         javascriptFiles.add("/weboo/adminlte4/js/adminlte.js");
 
-        Head head = new Head(page.getTitle());
-        Topbar topbar = new Topbar();
+        head.setTitle(page.getTitle());
+
         Breadcrumb breadcrumb = new Breadcrumb();
-        Footer footer = new Footer();
-        Sidenav sidenav = new Sidenav();
+
+
         String body = WidgetUtil.pageToHtml(page);
 
 
+        //language=HTML
         String temp = """
               <!DOCTYPE html>
               <html lang="{lang}">
@@ -85,10 +96,10 @@ public class AdminLte4Layout implements Layout {
                        
               </div>
               <!--end::App Wrapper-->
-              
-              
-              
-              
+                            
+                            
+                            
+                            
               <!--begin::Third Party Plugin(OverlayScrollbars)-->
               <script
                 src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.1.0/browser/overlayscrollbars.browser.es6.min.js"
@@ -108,7 +119,7 @@ public class AdminLte4Layout implements Layout {
                 crossorigin="anonymous"
               ></script>
               <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-              
+                            
               <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
               <script is:inline>
                 const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
@@ -117,7 +128,7 @@ public class AdminLte4Layout implements Layout {
                   scrollbarAutoHide: "leave",
                   scrollbarClickScroll: true,
                 };
-              
+                            
                 document.addEventListener("DOMContentLoaded", function () {
                   const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
                   if (
@@ -135,9 +146,9 @@ public class AdminLte4Layout implements Layout {
                 });
               </script>
               <!--end::OverlayScrollbars Configure-->
-              
-              
-              
+                            
+                            
+                            
               </body>
               </html>
               """;

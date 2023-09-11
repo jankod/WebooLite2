@@ -10,7 +10,7 @@ public class Main {
 
 
         initData();
-        Weboo.setDefaultLayout(AdminLte4Layout.class);
+        Weboo.setDefaultLayout(DemoLayout.class);
 
         Weboo.start(8080);
 

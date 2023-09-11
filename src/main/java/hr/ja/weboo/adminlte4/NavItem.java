@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 public class NavItem extends Widget {
 
-    //private List<NavItem> children = new ArrayList<>();
 
     private String iconClass;
     private String url;
@@ -31,16 +30,23 @@ public class NavItem extends Widget {
                     <li class="nav-item {open}">
                     <a href="{url}" class="nav-link">
                         <i class="nav-icon bi {iconClass} "></i>
-                        <p>{label}</p>
+                        <p>{label}
+                        
+                        {#if children.size != 0}    
+                        <i class="nav-arrow bi bi-chevron-right"></i>
+                        {/if}
+                        </p>
+                       
                     </a>
+                        {#if children.size != 0}
+                        <ul class="nav nav-treeview">
+                          {#for c in children}
+                             {c}
+                          {/for}
+                        </ul>
+                        {/if} 
                     <li>
-                    {#if children.size != 0}
-                    <ul class="nav nav-treeview">
-                      {#for c in children}
-                         {c}
-                      {/for}
-                    </ul>
-                    {/if} 
+                    
                     """,
               "url", url,
               "iconClass", iconClass,

@@ -27,11 +27,11 @@ public class Card extends Widget {
               </div>
                             
               """;
-        return qute(te, of(
+        return qute(te,
               "classes", getClasses(),
               "id", getWidgetId(),
               "title", title,
               "children", toChildrenHtml()
-        ));
+        );
     }
 }
