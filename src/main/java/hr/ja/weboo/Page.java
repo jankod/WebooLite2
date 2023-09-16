@@ -33,10 +33,11 @@ public abstract class Page {
     }
 
     public void call(JavaScriptFunction function) {
-        PageSessionManager.add(function, Context.getPageId());
+        PageRequestContext.add(function, Context.getPageId());
     }
+
     public void call(String jsCode, String... args) {
-        PageSessionManager.add(new CustomJavaScript(jsCode, args), Context.getPageId());
+        PageRequestContext.add(new CustomJavaScript(jsCode, args), Context.getPageId());
     }
 
 
@@ -45,4 +46,5 @@ public abstract class Page {
         add(new Pre(json));
 
     }
+
 }

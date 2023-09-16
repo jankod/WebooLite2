@@ -20,7 +20,6 @@ public class DefaultLayout implements Layout {
     public DefaultLayout() {
         javascriptFiles.add("jquery-3.7.0.min.js");
         javascriptFiles.add("weboo.js");
-
     }
 
     public String renderPage(Page page) {

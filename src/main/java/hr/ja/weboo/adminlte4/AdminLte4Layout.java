@@ -118,9 +118,13 @@ public class AdminLte4Layout implements Layout {
                 integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
                 crossorigin="anonymous"
               ></script>
-              <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
+              <!--end::Required Plugin(Bootstrap 5)-->
+              
+              <!--begin::Required Plugin(AdminLTE)-->
                             
-              <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+              <!--end::Required Plugin(AdminLTE)-->
+              
+              <!--begin::OverlayScrollbars Configure-->
               <script is:inline>
                 const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
                 const Default = {

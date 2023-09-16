@@ -37,11 +37,6 @@ public class ClientServerEvent {
         return this;
     }
 
-    private void checkExistFunction() {
-        if(jsFunction != null) {
-            throw new RuntimeException("jsFunction exist!");
-        }
-    }
 
     public ClientServerEvent handleOnClient(String jsCode, String... args) {
         checkExistFunction();
@@ -55,5 +50,9 @@ public class ClientServerEvent {
         return this;
     }
 
-
+    private void checkExistFunction() {
+        if(jsFunction != null) {
+            throw new RuntimeException("jsFunction exist!");
+        }
+    }
 }

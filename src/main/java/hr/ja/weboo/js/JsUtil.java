@@ -16,7 +16,7 @@ public class JsUtil {
         }
     }
 
-    public static String createJsEventsCode(List<ClientServerEvent> clientServerEvents) {
+    public static String createJsEventsCallCode(List<ClientServerEvent> clientServerEvents) {
         StringBuilder js = new StringBuilder();
 
         for (ClientServerEvent e : clientServerEvents) {
@@ -50,7 +50,7 @@ public class JsUtil {
         return aClass.getName().replaceAll("[^a-zA-Z0-9_$]", "_");
     }
 
-    public static String createJsFunctionCodeDefinition(Class<? extends JavaScriptFunction> c) {
+    public static String createJsFunctionDefinitionCode(Class<? extends JavaScriptFunction> c) {
         JsUtil.checkCommand(c);
         String code = c.getAnnotation(JavaScript.class).value();
         String functionName = createJsFunctionName(c);
@@ -76,10 +76,10 @@ public class JsUtil {
         return fieldsWithAnnotation;
     }
 
-    public static String createJsFunctionCodeDefinition(Collection<Class<? extends JavaScriptFunction>> commandDefinitions) {
+    public static String createJsFunctionDefinitionCode(Collection<Class<? extends JavaScriptFunction>> commandDefinitions) {
         StringBuilder js = new StringBuilder();
         for (Class<? extends JavaScriptFunction> c : commandDefinitions) {
-            js.append(createJsFunctionCodeDefinition(c));
+            js.append(createJsFunctionDefinitionCode(c));
         }
         return js.toString();
     }

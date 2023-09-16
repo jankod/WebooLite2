@@ -4,11 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.LinkedList;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -24,7 +21,7 @@ public abstract class Widget extends TemplateWidgetUtil {
 
     private String style = "";
 
-    private final List<Widget> children = new ArrayList<>(2);
+    private final LinkedList<Widget> children = new LinkedList<>();
 
     public Widget(Widget... widgets) {
         addAll(widgets);
@@ -50,7 +47,8 @@ public abstract class Widget extends TemplateWidgetUtil {
 
     public ClientServerEvent on(String eventName) {
         ClientServerEvent clientEvent = new ClientServerEvent(eventName, widgetId);
-        PageSessionManager.add(clientEvent, Context.getPageId());
+        // TODO: krivo, ide u static a ne u request contrxt od page
+        PageRequestContext.add(clientEvent, Context.getPageId());
         return clientEvent;
     }
 

@@ -7,12 +7,12 @@ import lombok.experimental.UtilityClass;
 import java.util.*;
 
 @UtilityClass
-public class PageSessionManager {
+public class PageRequestContext {
 
     /**
      * pageId => Holder
      */
-    private final HashMap<String, Holder> store = new HashMap<>();
+    private final HashMap<String, JavascriptHolder> store = new HashMap<>();
 
     public void add(ClientServerEvent clientServerEvent, String pageId) {
         getHolder(pageId).add(clientServerEvent);
@@ -22,10 +22,10 @@ public class PageSessionManager {
         getHolder(pageId).add(function);
     }
 
-    private Holder getHolder(String pageId) {
-        Holder holder;
+    private JavascriptHolder getHolder(String pageId) {
+        JavascriptHolder holder;
         if (!store.containsKey(pageId)) {
-            holder = new Holder();
+            holder = new JavascriptHolder();
             store.put(pageId, holder);
         } else {
             holder = store.get(pageId);
@@ -34,8 +34,8 @@ public class PageSessionManager {
     }
 
 
-    public List<ClientServerEvent> getEvents(String pageId) {
-        Holder holder = store.get(pageId);
+    public List<ClientServerEvent> getClientServerEvents(String pageId) {
+        JavascriptHolder holder = store.get(pageId);
         if (holder == null) {
             return Collections.emptyList();
         }
@@ -43,16 +43,19 @@ public class PageSessionManager {
     }
 
     public void register(Class<? extends JavaScriptFunction> commandClass, String pageId) {
-        Holder holder = store.get(pageId);
+        JavascriptHolder holder = store.get(pageId);
         holder.add(commandClass);
+    }
+
+    public static void setTitle(String title) {
     }
 }
 
 @Data
-class Holder {
+class JavascriptHolder {
     private final List<ClientServerEvent> events = new ArrayList<>();
 
-    private final List<JavaScriptFunction> functions = new ArrayList<>();
+    private final List<JavaScriptFunction> clientFunction = new ArrayList<>();
 
     private final Set<Class<? extends JavaScriptFunction>> functionDefinitions = new HashSet<>();
 
@@ -62,7 +65,7 @@ class Holder {
     }
 
     public void add(JavaScriptFunction function) {
-        this.functions.add(function);
+        this.clientFunction.add(function);
     }
 
     public void add(Class<? extends JavaScriptFunction> funcClass) {

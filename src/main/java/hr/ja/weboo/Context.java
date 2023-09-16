@@ -17,7 +17,7 @@ public class Context {
     private final ThreadLocal<CurrentContext> contextHolder = new ThreadLocal<>();
 
     void setCurrentContext(Request request, Response response, String pageId, PageMeta pageMeta) {
-        CurrentContext value = new CurrentContext(request, response, pageId, pageMeta);
+        CurrentContext value = new CurrentContext(request, response, pageId, pageMeta, request.session(true).id());
         contextHolder.set(value);
     }
 
@@ -59,12 +59,14 @@ public class Context {
         private final Response sparkResponse;
         private final String pageId;
         private final PageMeta pageMeta;
+        private final String sessionId;
 
-        CurrentContext(Request sparkRequest, Response sparkResponse, String pageId, PageMeta pageMeta) {
+        CurrentContext(Request sparkRequest, Response sparkResponse, String pageId, PageMeta pageMeta, String sessionId) {
             this.sparkRequest = sparkRequest;
             this.sparkResponse = sparkResponse;
             this.pageId = pageId;
             this.pageMeta = pageMeta;
+            this.sessionId = sessionId;
         }
 
 

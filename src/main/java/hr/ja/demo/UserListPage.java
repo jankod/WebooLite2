@@ -2,8 +2,10 @@ package hr.ja.demo;
 
 import hr.ja.demo.model.User;
 import hr.ja.weboo.*;
+import hr.ja.weboo.adminlte4.AdminLte4Layout;
 import hr.ja.weboo.components.*;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 @Path("/users")
@@ -11,6 +13,9 @@ public class UserListPage extends Page {
 
     public UserListPage() {
         //setLayout(new DefaultLayout());
+        DemoLayout layout = new DemoLayout();
+        setLayout(layout);
+        layout.getSidenav().getBrand().setText("NOVI TEXT");
 
         setTitle("User list page");
 
@@ -21,7 +26,7 @@ public class UserListPage extends Page {
 
         SimpleTable<User> table = new SimpleTable<>(User.getAll());
 
-        table.column("ID", model -> new Bold(model.getId()+""));
+        table.column("ID", model -> new Bold(model.getId() + ""));
         table.column("Name", u -> new Link(u.getName(), UserEditPage.class, "userId", u.getId()));
 
 
@@ -31,4 +36,6 @@ public class UserListPage extends Page {
 
 
     }
+
+//
 }

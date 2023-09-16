@@ -10,11 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
-import spark.Spark;
+import spark.*;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import static spark.Spark.post;
@@ -27,8 +28,11 @@ public class Weboo {
 
     private boolean development = true;
 
+    private List<PageFilter> pageFilterList = new ArrayList<>();
+
     @Setter
     private Class<? extends Layout> defaultLayout = DefaultLayout.class;
+
 
     public void start(int port) {
 
@@ -42,6 +46,15 @@ public class Weboo {
         Spark.port(port);
         staticFiles.location("/public"); // Static files;
 
+        post("/weboo/page_closed", new Route() {
+            @Override
+            public Object handle(spark.Request request, Response response) throws Exception {
+                String sessionId = request.session(true).id();
+                String tabId = request.queryParams("pageId");
+                ServerHandlerManager.pageClosed(tabId, sessionId);
+                return "OK";
+            }
+        });
         post("/weboo/event", (request, response) -> {
 
             String widgetId = request.headers("Weboo_widget_id");
@@ -50,14 +63,15 @@ public class Weboo {
             String pageId = request.headers("Weboo_page_id");
 
             Context.setCurrentContext(request, response, pageId, null);
+
             response.type("application/json");
-
-
-            ServerHandler eventHandler = ServerHandlerManager.get(handlerId, widgetId, pageId);
+            ServerHandler eventHandler = ServerHandlerManager.get(handlerId, widgetId, pageId, request.session(true).id());
             if (eventHandler == null) {
                 log.error("Cannot find event handler!!!");
                 return WebooUtil.toJson(new AjaxResult().alert("Error, cannot find event handler, try reload page!"));
             }
+
+
             return WebooUtil.toJson(eventHandler.handle());
 
         });
@@ -65,22 +79,28 @@ public class Weboo {
         for (PageMeta pageMeta : PageManager.getAllPages()) {
             Spark.get(pageMeta.getPath(), (request, response) -> {
                 try {
+
+                    String sessionId = request.session(true).id();
                     String pageId = WebooUtil.createPageId();
+                    //Browser browser = Browser.get(sessionId);
 
                     Context.setCurrentContext(request, response, pageId, pageMeta);
+                    runPageFilters(pageMeta.getPageClass());
+
                     Page newPage = pageMeta.createNewPage();
 
                     Layout layout = newPage.getLayout();
                     if (layout == null && defaultLayout != null) {
                         layout = defaultLayout.getConstructor().newInstance();
                     }
-                    if(layout == null) {
+                    if (layout == null) {
                         layout = new DefaultLayout();
                     }
 
-                    String jsCommandCode = JsUtil.createJsFunctionCodeDefinition(JavaScriptManager.getFunctions());
+                    String jsCommandCode = JsUtil.createJsFunctionDefinitionCode(JavaScriptManager.getFunctions());
 
-                    String jsEventsCode = JsUtil.createJsEventsCode(PageSessionManager.getEvents(Context.getPageId()));
+                    List<ClientServerEvent> events = PageRequestContext.getClientServerEvents(Context.getPageId());
+                    String jsEventsCode = JsUtil.createJsEventsCallCode(events);
 
                     layout.setLastBodyHtmlChunk("""
                           <script>
@@ -107,6 +127,14 @@ public class Weboo {
         }
 
         log.debug("http://localhost:" + port);
+    }
+
+    private static void runPageFilters(Class<? extends Page> pageClass) {
+        for (PageFilter pageFilter : pageFilterList) {
+            if (!pageFilter.allow(pageClass)) {
+
+            }
+        }
     }
 
     private void scanForFunctions(Class<? extends StackTraceElement> mainClass) {
@@ -161,4 +189,12 @@ public class Weboo {
         return PageManager.getPath(page);
     }
 
+
+    public static void addPageFilter(PageFilter pageFilter) {
+        pageFilterList.add(pageFilter);
+    }
+
+    public static Object getPageById(String pageId) {
+
+    }
 }

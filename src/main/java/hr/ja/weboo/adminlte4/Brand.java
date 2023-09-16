@@ -2,14 +2,18 @@ package hr.ja.weboo.adminlte4;
 
 import hr.ja.weboo.WebooUtil;
 import hr.ja.weboo.Widget;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
+@Setter
+@Getter
 public class Brand extends Widget {
 
-        private final String text;
-        private final String logoPath;
-        private final String logoAlt;
+        private  String text;
+        private  String logoPath;
+        private  String logoAlt;
 
         public Brand(String text, String logoPath, String logoAlt) {
 
@@ -33,7 +37,7 @@ public class Brand extends Widget {
                                   alt="{logoAlt}"
                                   class="brand-image opacity-75 shadow"
                           />
-                          <span class="brand-text fw-light">{logoAlt}</span>
+                          <span class="brand-text fw-light">{text}</span>
                       </a>
                   </div>
                   """;

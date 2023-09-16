@@ -197,3 +197,7 @@ const weboo = {
 // document.addEventListener('DOMContentLoaded', () => {
 //     //weboo.findEvents();
 // })
+
+window.addEventListener("beforeunload", function (event) {
+    navigator.sendBeacon("/weboo/page_closed?pageId=" + WEBOO_PAGE_ID);
+});

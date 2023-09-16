@@ -6,7 +6,7 @@ import hr.ja.weboo.*;
 import java.util.function.Predicate;
 
 
-@Path("/user/edit")
+@Path("/users/edit")
 public class UserEditPage extends Page {
 
 

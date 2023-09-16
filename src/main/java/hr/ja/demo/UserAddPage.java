@@ -5,7 +5,6 @@ import hr.ja.demo.model.Role;
 import hr.ja.demo.model.User;
 import hr.ja.weboo.*;
 import hr.ja.weboo.components.*;
-import hr.ja.weboo.components.bs.Color;
 import hr.ja.weboo.form.*;
 import hr.ja.weboo.js.*;
 import jakarta.validation.ConstraintViolation;
@@ -13,15 +12,18 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
 
+
 @Slf4j
 @Path("/users/add")
 public class UserAddPage extends Page {
+
 
     public UserAddPage() {
         Form form = new Form();
         form.add(new TextField(User.Fields.name, "Name"));
         Select selectRole = new Select(User.Fields.role, "Role");
         Div messagePlaceholder = new Div();
+
 
         selectRole.addOption("null", "Select one")
               .setSelected(true)
@@ -32,6 +34,7 @@ public class UserAddPage extends Page {
         form.add(selectRole);
 
         form.add(new SubmitButton("Save new user"));
+
 
         form.on("submit")
               .handleOnClient(new SendFormFunction(form))
@@ -50,9 +53,9 @@ public class UserAddPage extends Page {
                                 .call(new ShowHtmlFunction(new AlertWidget("poruka"), messagePlaceholder.getWidgetId()))
                                 //.call(message.callShowMessage("Uspjesno si unio!"))
                                 //.goTo(UserAddPage.class);
-                          ;
+                                ;
                       } else {
-                          return new AjaxResult().call(new ShowValidationErrorsFunction(violations, form.getWidgetId()));
+                          return new AjaxResult().call(new ShowFormValidationErrorsFunction(violations, form.getWidgetId()));
                       }
 
                   } catch (JsonProcessingException e) {

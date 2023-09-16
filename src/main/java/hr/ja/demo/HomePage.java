@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Path("/")
 @Slf4j
-public class HomePage extends Page {
+public class HomePage implements IPage {
+
+
 
     Button btn = new Button("Klikni me user list page");
 

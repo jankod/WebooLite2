@@ -1,8 +1,8 @@
 package hr.ja.demo;
 
+import hr.ja.demo.model.Role;
 import hr.ja.demo.model.User;
-import hr.ja.weboo.DefaultLayout;
-import hr.ja.weboo.Weboo;
+import hr.ja.weboo.*;
 import hr.ja.weboo.adminlte4.AdminLte4Layout;
 
 public class Main {
@@ -12,6 +12,24 @@ public class Main {
         initData();
         Weboo.setDefaultLayout(DemoLayout.class);
 
+        Weboo.addPageFilter(new PageFilter() {
+            @Override
+            public boolean allow(Class<? extends Page> page) {
+                if (page.isAssignableFrom(HomePage.class)) {
+                    User user = Context.req().session(true).attribute("user");
+                    if (user != null) {
+                        if (user.getRole().equals(Role.USER)) {
+                            // ...
+
+                        }
+                    }
+
+
+                }
+                return true;
+            }
+        });
+
         Weboo.start(8080);
 
 
@@ -19,8 +37,8 @@ public class Main {
 
     private static void initData() {
         if (User.getAll().isEmpty()) {
-            new User( "Janko").save();
-            new User( "Pero").save();
+            new User("Janko").save();
+            new User("Pero").save();
         }
     }
 }

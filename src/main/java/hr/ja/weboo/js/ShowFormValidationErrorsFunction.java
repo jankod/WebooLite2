@@ -1,12 +1,10 @@
 package hr.ja.weboo.js;
 
-import hr.ja.demo.model.User;
 import jakarta.validation.ConstraintViolation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +22,7 @@ import java.util.Set;
       });
       """)
 @Getter
-public class ShowValidationErrorsFunction extends JavaScriptFunction {
+public class ShowFormValidationErrorsFunction extends JavaScriptFunction {
 
     @JavaScriptParam
     private final String formId;
@@ -32,7 +30,7 @@ public class ShowValidationErrorsFunction extends JavaScriptFunction {
     @JavaScriptParam
     private List<FieldError> errors = new ArrayList<>();
 
-    public <M> ShowValidationErrorsFunction(Set<ConstraintViolation<M>> violations, String formId) {
+    public <M> ShowFormValidationErrorsFunction(Set<ConstraintViolation<M>> violations, String formId) {
         this.formId = formId;
         for (ConstraintViolation<M> violation : violations) {
             errors.add(new FieldError(violation.getPropertyPath().toString(), violation.getMessage()));

@@ -46,6 +46,10 @@ public class Form extends Widget {
         clientEvent.setServerHandler(h);
     }
 
+    public FormConfigurer configure() {
+        return new FormConfigurer(this);
+    }
+
     public static void main(String[] args) {
         Form form = new Form();
 
