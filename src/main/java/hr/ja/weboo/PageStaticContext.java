@@ -6,15 +6,12 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 
 @Slf4j
 @UtilityClass
-public class ServerHandlerManager {
+public class PageStaticContext {
 
     /**
      * handlerId => HandlerWrapper
@@ -51,16 +48,8 @@ public class ServerHandlerManager {
                 handlerMap.remove(h.handlerId);
             }
         }
-
-        printStatus(handlerMap);
     }
 
-    private static void printStatus(Map<String, HandlerWrapper> handlerMap) {
-        Map<String, List<HandlerWrapper>> collect = handlerMap.values().stream().collect(Collectors.groupingBy(HandlerWrapper::getPageId));
-        log.debug("ServerHandler STATUS: ");
-
-        collect.forEach((pageId, handlerWrappers) -> log.debug("Page id: {} handlers: {} ", Weboo.getPageById(pageId), handlerWrappers.size()));
-    }
 }
 
 @Data

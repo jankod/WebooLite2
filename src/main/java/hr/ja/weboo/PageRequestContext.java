@@ -2,17 +2,19 @@ package hr.ja.weboo;
 
 import hr.ja.weboo.js.JavaScriptFunction;
 import lombok.Data;
-import lombok.experimental.UtilityClass;
 
 import java.util.*;
 
-@UtilityClass
 public class PageRequestContext {
 
     /**
      * pageId => Holder
      */
-    private final HashMap<String, JavascriptHolder> store = new HashMap<>();
+    //private final HashMap<String, JavascriptHolder> store = new HashMap<>();
+
+//    private final ThreadLocal<RequestStore> store = new InheritableThreadLocal<>();
+
+    private static final String REQUEST_ATTRIBUTE_NAME = "hr.ja.weboo.page_request";
 
     public void add(ClientServerEvent clientServerEvent, String pageId) {
         getHolder(pageId).add(clientServerEvent);
@@ -22,10 +24,16 @@ public class PageRequestContext {
         getHolder(pageId).add(function);
     }
 
-    private JavascriptHolder getHolder(String pageId) {
-        JavascriptHolder holder;
-        if (!store.containsKey(pageId)) {
-            holder = new JavascriptHolder();
+    private RequestStore getHolder(String pageId) {
+        RequestStore store = Context.req().attribute(REQUEST_ATTRIBUTE_NAME);
+        if(store == null) {
+            store = new RequestStore();
+        }
+
+        RequestStore holder;
+        if (!store.get().getPageId().equals(pageId)) {
+            holder = new RequestStore();
+
             store.put(pageId, holder);
         } else {
             holder = store.get(pageId);
@@ -35,7 +43,7 @@ public class PageRequestContext {
 
 
     public List<ClientServerEvent> getClientServerEvents(String pageId) {
-        JavascriptHolder holder = store.get(pageId);
+        RequestStore holder = store.get(pageId);
         if (holder == null) {
             return Collections.emptyList();
         }
@@ -43,16 +51,15 @@ public class PageRequestContext {
     }
 
     public void register(Class<? extends JavaScriptFunction> commandClass, String pageId) {
-        JavascriptHolder holder = store.get(pageId);
+        RequestStore holder = store.get(pageId);
         holder.add(commandClass);
     }
 
-    public static void setTitle(String title) {
-    }
 }
 
 @Data
-class JavascriptHolder {
+class RequestStore {
+
     private final List<ClientServerEvent> events = new ArrayList<>();
 
     private final List<JavaScriptFunction> clientFunction = new ArrayList<>();

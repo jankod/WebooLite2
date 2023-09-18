@@ -51,7 +51,7 @@ public class Weboo {
             public Object handle(spark.Request request, Response response) throws Exception {
                 String sessionId = request.session(true).id();
                 String tabId = request.queryParams("pageId");
-                ServerHandlerManager.pageClosed(tabId, sessionId);
+                PageStaticContext.pageClosed(tabId, sessionId);
                 return "OK";
             }
         });
@@ -65,7 +65,7 @@ public class Weboo {
             Context.setCurrentContext(request, response, pageId, null);
 
             response.type("application/json");
-            ServerHandler eventHandler = ServerHandlerManager.get(handlerId, widgetId, pageId, request.session(true).id());
+            ServerHandler eventHandler = PageStaticContext.get(handlerId, widgetId, pageId, request.session(true).id());
             if (eventHandler == null) {
                 log.error("Cannot find event handler!!!");
                 return WebooUtil.toJson(new AjaxResult().alert("Error, cannot find event handler, try reload page!"));
@@ -194,7 +194,4 @@ public class Weboo {
         pageFilterList.add(pageFilter);
     }
 
-    public static Object getPageById(String pageId) {
-
-    }
 }

@@ -24,7 +24,7 @@ public class JsUtil {
 
             String eventName = e.getEventName();
             String widgetId = e.getWidgetId();
-            String handlerId = ServerHandlerManager.register(e.getServerHandler(), Context.getPageId(), widgetId);
+            String handlerId = PageStaticContext.register(e.getServerHandler(), Context.getPageId(), widgetId);
             String funcCall = WebooUtil.toJson(function);
 
             //WebooJs.onEvent(widgetId, eventName, handlerId, jsCommand);

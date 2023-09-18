@@ -14,9 +14,6 @@ public abstract class Page {
     @Getter
     private List<Widget> widgets = new ArrayList<>();
 
-    //@Getter
-    //private final String pageId = WebooUtil.pageNewId(getClass());
-
     @Getter
     @Setter
     private Layout layout = null;
@@ -44,7 +41,6 @@ public abstract class Page {
     public void dump(Object u) {
         String json = WebooUtil.toJson(u);
         add(new Pre(json));
-
     }
 
 }

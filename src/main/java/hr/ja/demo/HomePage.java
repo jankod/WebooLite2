@@ -9,15 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Path("/")
 @Slf4j
-public class HomePage implements IPage {
+public class HomePage extends Page {
 
-
-
-    Button btn = new Button("Klikni me user list page");
+    private Button btn = new Button("Klikni me user list page");
+    {
+        btn.on("ssfd").handleOnClient("");
+    }
 
     public HomePage() {
         setTitle("Main page");
-
 
         btn.on("click")
               .handleOnClient("""

@@ -44,11 +44,10 @@ public abstract class Widget extends TemplateWidgetUtil {
         return WidgetUtil.widgetToHtml(getChildren());
     }
 
-
     public ClientServerEvent on(String eventName) {
         ClientServerEvent clientEvent = new ClientServerEvent(eventName, widgetId);
         // TODO: krivo, ide u static a ne u request contrxt od page
-        PageRequestContext.add(clientEvent, Context.getPageId());
+        //PageRequestContext.add(clientEvent, Context.getPageId());
         return clientEvent;
     }
 
@@ -66,19 +65,11 @@ public abstract class Widget extends TemplateWidgetUtil {
 
     protected String getIdClassStyleAttr() {
 
+        // TODO: escape classes and styles
         return paramValue("id", getWidgetId())
                + paramValue("class", getClasses())
                + paramValue("style", getStyle());
 
-
-//        return WebooUtil.qute("""
-//                    id="{id}" class="{class}" style="{style}"
-//                    """, Map.of(
-//                    "id", getWidgetId(),
-//                    "class", getClasses(),
-//                    "style", getStyle()
-//              )
-//        );
     }
 
     private String paramValue(String param, String value) {
@@ -87,7 +78,6 @@ public abstract class Widget extends TemplateWidgetUtil {
         }
         return "%s=\"%s\" ".formatted(param, value);
     }
-
 
     public boolean hasChildren() {
         return !children.isEmpty();

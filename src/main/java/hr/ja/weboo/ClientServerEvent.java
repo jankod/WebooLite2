@@ -6,6 +6,9 @@ import hr.ja.weboo.js.JavaScriptFunction;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+/***
+ * After requst split to server (hold on server) and client (send to client and forgot)...
+ */
 @Data
 @Accessors(chain = true)
 public class ClientServerEvent {
@@ -38,9 +41,9 @@ public class ClientServerEvent {
     }
 
 
-    public ClientServerEvent handleOnClient(String jsCode, String... args) {
+    public ClientServerEvent handleOnClient(String jsCode, String... jsArgs) {
         checkExistFunction();
-        this.jsFunction = new CustomJavaScript(jsCode, args);
+        this.jsFunction = new CustomJavaScript(jsCode, jsArgs);
         return this;
     }
 
@@ -51,7 +54,7 @@ public class ClientServerEvent {
     }
 
     private void checkExistFunction() {
-        if(jsFunction != null) {
+        if (jsFunction != null) {
             throw new RuntimeException("jsFunction exist!");
         }
     }
