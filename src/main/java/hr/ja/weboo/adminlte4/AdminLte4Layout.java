@@ -1,10 +1,12 @@
 package hr.ja.weboo.adminlte4;
 
 import hr.ja.weboo.*;
+import hr.ja.weboo.js.JavaScriptFunction;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -170,5 +172,10 @@ public class AdminLte4Layout implements Layout {
               "sidenav", sidenav
         ));
 
+    }
+
+    @Override
+    public Collection<Class<? extends JavaScriptFunction>> getJavaScript() {
+        return null;
     }
 }

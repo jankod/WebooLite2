@@ -34,7 +34,6 @@ public class Form extends Widget {
     }
 
     public void onSubmit(SubmitHandler handler) {
-        ServerHandler h = () -> handler.submitForm(new FormData());
         ClientServerEvent clientEvent = on("submit");
         clientEvent.handleOnClient(new CustomJavaScript("""
               console.log(" this.",  this);
@@ -43,10 +42,11 @@ public class Form extends Widget {
               alert("form submit!");
               """, "widgetId", getWidgetId()));
 
-        clientEvent.setServerHandler(h);
+        clientEvent.setServerHandler(handler::submitForm);
     }
 
     public FormConfigurer configure() {
+        // TODO: like spring security
         return new FormConfigurer(this);
     }
 

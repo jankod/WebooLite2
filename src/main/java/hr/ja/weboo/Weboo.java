@@ -46,6 +46,10 @@ public class Weboo {
         Spark.port(port);
         staticFiles.location("/public"); // Static files;
 
+        staticFiles.location("/static");
+        staticFiles.location("/META-INF/resources");
+
+
         post("/weboo/page_closed", new Route() {
             @Override
             public Object handle(spark.Request request, Response response) throws Exception {
@@ -96,10 +100,10 @@ public class Weboo {
                     if (layout == null) {
                         layout = new DefaultLayout();
                     }
-                    List<JavaScriptFunction> pageFunctions = newPage.getJavaScriptFunctionsCalled();
+                    List<JavaScriptFunction> pageFunctions = newPage.getJavaScript();
 
 
-                    String jsCommandCode = JsUtil.createJsFunctionDefinitionCode(JavaScriptManager.getFunctions());
+                    String jsCommandCode = JsUtil.createJsFunctionDefinitionCode(layout.getJavaScript());
 
                     List<ClientServerEvent> events = findClientServerEvents(newPage);
 
@@ -141,7 +145,7 @@ public class Weboo {
 
     private static void findClientServerEvents(List<Widget> widgets, List<ClientServerEvent> events) {
         for (Widget widget : widgets) {
-            if(!widget.getClientServerEvents().isEmpty()) {
+            if (!widget.getClientServerEvents().isEmpty()) {
                 events.addAll(widget.getClientServerEvents());
             }
             findClientServerEvents(widget.getChildren(), events);
@@ -151,7 +155,8 @@ public class Weboo {
     private static void runPageFilters(Class<? extends Page> pageClass) {
         for (PageFilter pageFilter : pageFilterList) {
             if (!pageFilter.allow(pageClass)) {
-
+                // TODO: what if page is not allowed?
+                log.debug("This page is not allowed {}", pageClass);
             }
         }
     }
@@ -168,13 +173,16 @@ public class Weboo {
         Set<Class<? extends JavaScriptFunction>> jsFounded = reflections.getSubTypesOf(JavaScriptFunction.class);
         for (Class<? extends JavaScriptFunction> p : jsFounded) {
             //    log.debug("Found function: {}", p);
-            addJavascript(p);
+            addGlobalJavascript(p);
+            // TODO: add function to global layout handler...
         }
     }
 
-    private void addJavascript(Class<? extends JavaScriptFunction> functionClass) {
-        JavaScriptManager.add(functionClass);
+    private List<Class<? extends JavaScriptFunction>> globalFunctions = new ArrayList<>();
+
+    private void addGlobalJavascript(Class<? extends JavaScriptFunction> function) {
     }
+
 
     private void scanForPages(Class<? extends StackTraceElement> mainClass) {
         String packageName = mainClass.getPackage().getName();
@@ -207,7 +215,6 @@ public class Weboo {
         }
         return PageManager.getPath(page);
     }
-
 
     public static void addPageFilter(PageFilter pageFilter) {
         pageFilterList.add(pageFilter);

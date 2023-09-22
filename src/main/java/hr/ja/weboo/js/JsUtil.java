@@ -50,7 +50,22 @@ public class JsUtil {
         return aClass.getName().replaceAll("[^a-zA-Z0-9_$]", "_");
     }
 
-    public static String createJsFunctionDefinitionCode(Class<? extends JavaScriptFunction> c) {
+
+
+    private static List<String> findJsParameters(Class<?> aClass) {
+        List<String> fieldsWithAnnotation = new ArrayList<>();
+        Field[] fields = aClass.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(JavaScriptParam.class)) {
+                fieldsWithAnnotation.add(field.getName());
+            }
+        }
+        return fieldsWithAnnotation;
+
+    }
+
+
+      public static String createJsFunctionDefinitionCode(Class<? extends JavaScriptFunction> c) {
         JsUtil.checkCommand(c);
         String code = c.getAnnotation(JavaScript.class).value();
         String functionName = createJsFunctionName(c);
@@ -63,17 +78,6 @@ public class JsUtil {
                                     
               """;
         return WebooUtil.qute(template, Map.of("functionName", functionName, "code", code));
-    }
-
-    private static List<String> findJsParameters(Class<?> aClass) {
-        List<String> fieldsWithAnnotation = new ArrayList<>();
-        Field[] fields = aClass.getDeclaredFields();
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(JavaScriptParam.class)) {
-                fieldsWithAnnotation.add(field.getName());
-            }
-        }
-        return fieldsWithAnnotation;
     }
 
     public static String createJsFunctionDefinitionCode(Collection<Class<? extends JavaScriptFunction>> commandDefinitions) {

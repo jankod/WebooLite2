@@ -24,7 +24,7 @@ public abstract class Page {
     private String title = "Title " + getClass().getSimpleName();
 
     @Getter(AccessLevel.PACKAGE)
-    private final List<JavaScriptFunction> javaScriptFunctionsCalled = new ArrayList<>();
+    private final List<JavaScriptFunction> javaScript = new ArrayList<>();
 
 //    public abstract void onRequest();
 
@@ -34,11 +34,11 @@ public abstract class Page {
     }
 
     public void call(JavaScriptFunction function) {
-        javaScriptFunctionsCalled.add(function);
+        javaScript.add(function);
     }
 
     public void call(String jsCode, String... args) {
-        javaScriptFunctionsCalled.add(new CustomJavaScript(jsCode, args));
+        javaScript.add(new CustomJavaScript(jsCode, args));
     }
 
     public void dump(Object u) {

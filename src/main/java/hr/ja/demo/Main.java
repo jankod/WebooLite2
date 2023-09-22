@@ -4,13 +4,17 @@ import hr.ja.demo.model.Role;
 import hr.ja.demo.model.User;
 import hr.ja.weboo.*;
 import hr.ja.weboo.adminlte4.AdminLte4Layout;
+import hr.ja.weboo.tabler.TablerLayout;
+import spark.Spark;
 
 public class Main {
     public static void main(String[] args) {
 
 
         initData();
-        Weboo.setDefaultLayout(DemoLayout.class);
+        Weboo.setDefaultLayout(TablerLayout.class);
+
+
 
         Weboo.addPageFilter(new PageFilter() {
             @Override

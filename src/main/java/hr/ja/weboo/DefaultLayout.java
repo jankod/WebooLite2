@@ -1,10 +1,12 @@
 package hr.ja.weboo;
 
 
+import hr.ja.weboo.js.JavaScriptFunction;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +47,11 @@ public class DefaultLayout implements Layout {
               "lang", "en", // TODO: from config or???,
               "lastBodyTag", lastBodyHtmlChunk
         ));
+    }
+
+    @Override
+    public Collection<Class<? extends JavaScriptFunction>> getJavaScript() {
+        return null;
     }
 
     protected String head(Page page) {
