@@ -36,10 +36,10 @@ public class AjaxResult implements Serializable {
 
 
     public AjaxResult goTo(Class<? extends Page> aClass) {
-        return add(new GoToPage(aClass));
+        return add(new GoToPageFunction(aClass));
     }
 
     public AjaxResult alert(String message) {
-        return add(new AlertFunc(message));
+        return add(new AlertFunction(message));
     }
 }

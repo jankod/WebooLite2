@@ -59,7 +59,7 @@ public class UserAddPage extends Page {
                       }
 
                   } catch (JsonProcessingException e) {
-                      return new AjaxResult().call(new AlertFunc("Error json: " + e.getMessage()));
+                      return new AjaxResult().call(new AlertFunction("Error json: " + e.getMessage()));
                   }
               });
 

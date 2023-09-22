@@ -96,10 +96,13 @@ public class Weboo {
                     if (layout == null) {
                         layout = new DefaultLayout();
                     }
+                    List<JavaScriptFunction> pageFunctions = newPage.getJavaScriptFunctionsCalled();
+
 
                     String jsCommandCode = JsUtil.createJsFunctionDefinitionCode(JavaScriptManager.getFunctions());
 
-                    List<ClientServerEvent> events = PageRequestContext.getClientServerEvents(Context.getPageId());
+                    List<ClientServerEvent> events = findClientServerEvents(newPage);
+
                     String jsEventsCode = JsUtil.createJsEventsCallCode(events);
 
                     layout.setLastBodyHtmlChunk("""
@@ -127,6 +130,22 @@ public class Weboo {
         }
 
         log.debug("http://localhost:" + port);
+    }
+
+    private static List<ClientServerEvent> findClientServerEvents(Page page) {
+        List<Widget> widgets = page.getWidgets();
+        List<ClientServerEvent> events = new ArrayList<>();
+        findClientServerEvents(widgets, events);
+        return events;
+    }
+
+    private static void findClientServerEvents(List<Widget> widgets, List<ClientServerEvent> events) {
+        for (Widget widget : widgets) {
+            if(!widget.getClientServerEvents().isEmpty()) {
+                events.addAll(widget.getClientServerEvents());
+            }
+            findClientServerEvents(widget.getChildren(), events);
+        }
     }
 
     private static void runPageFilters(Class<? extends Page> pageClass) {

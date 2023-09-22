@@ -3,6 +3,7 @@ package hr.ja.weboo;
 import hr.ja.weboo.components.Pre;
 import hr.ja.weboo.js.CustomJavaScript;
 import hr.ja.weboo.js.JavaScriptFunction;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,9 @@ public abstract class Page {
     @Getter
     private String title = "Title " + getClass().getSimpleName();
 
+    @Getter(AccessLevel.PACKAGE)
+    private final List<JavaScriptFunction> javaScriptFunctionsCalled = new ArrayList<>();
+
 //    public abstract void onRequest();
 
     public <T extends Widget> T add(T widget) {
@@ -30,13 +34,12 @@ public abstract class Page {
     }
 
     public void call(JavaScriptFunction function) {
-        PageRequestContext.add(function, Context.getPageId());
+        javaScriptFunctionsCalled.add(function);
     }
 
     public void call(String jsCode, String... args) {
-        PageRequestContext.add(new CustomJavaScript(jsCode, args), Context.getPageId());
+        javaScriptFunctionsCalled.add(new CustomJavaScript(jsCode, args));
     }
-
 
     public void dump(Object u) {
         String json = WebooUtil.toJson(u);

@@ -18,6 +18,7 @@ public class HomePage extends Page {
 
     public HomePage() {
         setTitle("Main page");
+        setLayout(new DefaultLayout());
 
         btn.on("click")
               .handleOnClient("""
@@ -45,7 +46,7 @@ public class HomePage extends Page {
         add(new Link("User add", UserAddPage.class));
         add(btn);
 
-        call(new AlertFunc("Ovo je page"));
+        call(new AlertFunction("Ovo je page"));
     }
 
 

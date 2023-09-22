@@ -7,52 +7,36 @@ import java.util.*;
 
 public class PageRequestContext {
 
-    /**
-     * pageId => Holder
-     */
-    //private final HashMap<String, JavascriptHolder> store = new HashMap<>();
-
-//    private final ThreadLocal<RequestStore> store = new InheritableThreadLocal<>();
-
     private static final String REQUEST_ATTRIBUTE_NAME = "hr.ja.weboo.page_request";
 
-    public void add(ClientServerEvent clientServerEvent, String pageId) {
-        getHolder(pageId).add(clientServerEvent);
+    public void add(ClientServerEvent clientServerEvent) {
+        getStore().add(clientServerEvent);
     }
 
-    public void add(JavaScriptFunction function, String pageId) {
-        getHolder(pageId).add(function);
+    public void add(JavaScriptFunction function) {
+        getStore().add(function);
     }
 
-    private RequestStore getHolder(String pageId) {
+
+    private RequestStore getStore() {
         RequestStore store = Context.req().attribute(REQUEST_ATTRIBUTE_NAME);
         if(store == null) {
-            store = new RequestStore();
+            setStore(new RequestStore());
         }
+        return store;
+    }
 
-        RequestStore holder;
-        if (!store.get().getPageId().equals(pageId)) {
-            holder = new RequestStore();
-
-            store.put(pageId, holder);
-        } else {
-            holder = store.get(pageId);
-        }
-        return holder;
+    private void setStore(RequestStore requestStore) {
+        Context.req().attribute(REQUEST_ATTRIBUTE_NAME, requestStore);
     }
 
 
-    public List<ClientServerEvent> getClientServerEvents(String pageId) {
-        RequestStore holder = store.get(pageId);
-        if (holder == null) {
-            return Collections.emptyList();
-        }
-        return holder.getEvents();
+    public List<ClientServerEvent> getClientServerEvents() {
+        return getStore().getEvents();
     }
 
-    public void register(Class<? extends JavaScriptFunction> commandClass, String pageId) {
-        RequestStore holder = store.get(pageId);
-        holder.add(commandClass);
+    public void register(Class<? extends JavaScriptFunction> commandClass) {
+        getStore().add(commandClass);
     }
 
 }

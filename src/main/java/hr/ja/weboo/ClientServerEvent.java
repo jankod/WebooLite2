@@ -41,7 +41,7 @@ public class ClientServerEvent {
     }
 
 
-    public ClientServerEvent handleOnClient(String jsCode, String... jsArgs) {
+    public ClientServerEvent  handleOnClient(String jsCode, String... jsArgs) {
         checkExistFunction();
         this.jsFunction = new CustomJavaScript(jsCode, jsArgs);
         return this;

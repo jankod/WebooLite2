@@ -49,7 +49,8 @@ public class Context {
         return contextHolder.get().pageMeta.getPageClass();
     }
 
-    public static void sendCommand(JavaScriptFunction jsCommand) {
+    public void sendCommand(JavaScriptFunction jsCommand) {
+
     }
 
     @Data
