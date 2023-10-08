@@ -14,7 +14,7 @@ public class Main {
         initData();
         Weboo.setDefaultLayout(TablerLayout.class);
 
-
+        Weboo.setDevMode(true);
 
         Weboo.addPageFilter(new PageFilter() {
             @Override

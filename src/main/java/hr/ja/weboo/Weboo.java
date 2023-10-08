@@ -22,13 +22,17 @@ import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 @Slf4j
-@Getter
 @UtilityClass
 public class Weboo {
 
-    private boolean development = true;
+    private static boolean devMode = true;
 
-    private List<PageFilter> pageFilterList = new ArrayList<>();
+    private static List<PageFilter> pageFilterList = new ArrayList<>();
+
+
+    public static void setDevMode(boolean devMode) {
+        Weboo.devMode = devMode;
+    }
 
     @Setter
     private Class<? extends Layout> defaultLayout = DefaultLayout.class;
