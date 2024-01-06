@@ -12,7 +12,7 @@ public class Main {
 
         initData();
 
-        Weboo.setDefaultLayout(TablerLayout.class);
+//        Weboo.setDefaultLayout(TablerLayout.class);
 
         Weboo.setDevMode(true);
 

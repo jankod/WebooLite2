@@ -20,7 +20,7 @@ public class DefaultLayout implements Layout {
     private List<String> cssFiles = new ArrayList<>();
 
     public DefaultLayout() {
-        javascriptFiles.add("jquery-3.7.0.min.js");
+        javascriptFiles.add("jquery-3.7.1.js");
         javascriptFiles.add("weboo.js");
     }
 

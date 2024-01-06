@@ -23,7 +23,7 @@ public class Form extends Widget {
                 {children.raw}
               </form>
               <script>
-              //  weboo.form('{id}');
+              weboo.form('{id}');
               </script>
                 """;
 
