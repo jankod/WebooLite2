@@ -24,7 +24,6 @@ public class UserAddPage extends Page {
         Select selectRole = new Select(User.Fields.role, "Role");
         Div messagePlaceholder = new Div();
 
-
         selectRole.addOption("null", "Select one")
               .setSelected(true)
               .setDisable(true);

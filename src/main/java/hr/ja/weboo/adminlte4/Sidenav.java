@@ -1,7 +1,6 @@
 package hr.ja.weboo.adminlte4;
 
 import hr.ja.weboo.EmptyText;
-import hr.ja.weboo.Span;
 import hr.ja.weboo.WebooUtil;
 import hr.ja.weboo.Widget;
 import lombok.Getter;

@@ -8,7 +8,7 @@ public interface Layout {
 
     void setLastBodyHtmlChunk(String html);
 
-    String renderPage(Page page);
+    String makeTemplate(Page page);
 
     Collection<Class<? extends JavaScriptFunction>> getJavaScript();
 }

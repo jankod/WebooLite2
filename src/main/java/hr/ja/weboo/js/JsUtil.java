@@ -24,6 +24,8 @@ public class JsUtil {
 
             String eventName = e.getEventName();
             String widgetId = e.getWidgetId();
+
+            // fixme server handler moze biti null
             String handlerId = PageStaticContext.register(e.getServerHandler(), Context.getPageId(), widgetId);
             String funcCall = WebooUtil.toJson(function);
 
@@ -82,6 +84,9 @@ public class JsUtil {
 
     public static String createJsFunctionDefinitionCode(Collection<Class<? extends JavaScriptFunction>> commandDefinitions) {
         StringBuilder js = new StringBuilder();
+        if(commandDefinitions == null) {
+            return "";
+        }
         for (Class<? extends JavaScriptFunction> c : commandDefinitions) {
             js.append(createJsFunctionDefinitionCode(c));
         }

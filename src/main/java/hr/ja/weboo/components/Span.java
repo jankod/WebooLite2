@@ -1,5 +1,6 @@
-package hr.ja.weboo;
+package hr.ja.weboo.components;
 
+import hr.ja.weboo.Widget;
 import hr.ja.weboo.components.Col;
 import hr.ja.weboo.components.SimpleTag;
 

@@ -19,6 +19,9 @@ public class PageStaticContext {
     private Map<String, HandlerWrapper> handlerMap = new HashMap<>();
 
     public String register(hr.ja.weboo.ServerHandler serverHandler, String pageId, String widgetId) {
+        if (serverHandler == null) {
+            return "null";
+        }
         String handlerId = WebooUtil.eventHandlerNewId(serverHandler.getClass());
         String sessionId = Context.req().session(true).id();
 

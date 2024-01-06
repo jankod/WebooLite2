@@ -22,7 +22,7 @@ public class TablerLayout implements Layout {
     private String title;
 
     @Override
-    public String renderPage(Page page) {
+    public String makeTemplate(Page page) {
 
         String t = """
                             
@@ -676,7 +676,7 @@ public class TablerLayout implements Layout {
                             
               """;
 
-        return null;
+        return t;
     }
 
 }

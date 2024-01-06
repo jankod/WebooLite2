@@ -24,10 +24,10 @@ public class DefaultLayout implements Layout {
         javascriptFiles.add("weboo.js");
     }
 
-    public String renderPage(Page page) {
+    public String makeTemplate(Page page) {
 
 
-        String body = WidgetUtil.pageToHtml(page);
+        String pageHtml = WidgetUtil.pageToHtml(page);
 
         String template = """
               <!doctype html>
@@ -35,7 +35,7 @@ public class DefaultLayout implements Layout {
                 {head.raw}
                 <body class='container'>
                     <h1>Default layout</h1>
-                   {body.raw}
+                   {pageHtml.raw}
                    {lastBodyTag.raw}
                 </body>
                 </html>
@@ -43,7 +43,7 @@ public class DefaultLayout implements Layout {
 
         return WebooUtil.qute(template, Map.of(
               "head", head(page),
-              "body", body,
+              "pageHtml", pageHtml,
               "lang", "en", // TODO: from config or???,
               "lastBodyTag", lastBodyHtmlChunk
         ));

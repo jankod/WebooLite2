@@ -10,8 +10,8 @@ import spark.Spark;
 public class Main {
     public static void main(String[] args) {
 
-
         initData();
+
         Weboo.setDefaultLayout(TablerLayout.class);
 
         Weboo.setDevMode(true);

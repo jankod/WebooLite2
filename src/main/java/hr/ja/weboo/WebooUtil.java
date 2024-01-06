@@ -132,8 +132,6 @@ public class WebooUtil {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //objectMapper.configure(DeserializationFeature.FAIL_, false);
         objectMapper.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
-
-
     }
 
     @SneakyThrows
@@ -145,7 +143,6 @@ public class WebooUtil {
     public static String toJsonRaw(Object o) {
         return objectMapper.writer().writeValueAsString(o);
     }
-
 
     private static ValidatorFactory factory;
 

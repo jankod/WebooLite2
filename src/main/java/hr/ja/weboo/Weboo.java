@@ -3,7 +3,6 @@ package hr.ja.weboo;
 import hr.ja.weboo.js.AjaxResult;
 import hr.ja.weboo.js.JavaScriptFunction;
 import hr.ja.weboo.js.JsUtil;
-import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +39,7 @@ public class Weboo {
 
     public void start(int port) {
 
-        final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        Class<? extends StackTraceElement> mainClass = stackTrace[1].getClass();
+        Class<? extends StackTraceElement> mainClass = getCallerClass();
 
         scanForPages(mainClass);
 
@@ -85,6 +83,7 @@ public class Weboo {
         });
 
         for (PageMeta pageMeta : PageManager.getAllPages()) {
+            log.debug("Page: {} {}", pageMeta.getPageClass().getSimpleName(), pageMeta.getPath());
             Spark.get(pageMeta.getPath(), (request, response) -> {
                 try {
 
@@ -106,7 +105,6 @@ public class Weboo {
                     }
                     List<JavaScriptFunction> pageFunctions = newPage.getJavaScript();
 
-
                     String jsCommandCode = JsUtil.createJsFunctionDefinitionCode(layout.getJavaScript());
 
                     List<ClientServerEvent> events = findClientServerEvents(newPage);
@@ -124,7 +122,7 @@ public class Weboo {
 
                     //  newPage.onRequest();
 
-                    return layout.renderPage(newPage);
+                    return layout.makeTemplate(newPage);
 
                 } catch (Exception e) {
                     WebooUtil.printStackTraceError(e);
@@ -138,6 +136,10 @@ public class Weboo {
         }
 
         log.debug("http://localhost:" + port);
+    }
+
+    private static Class<? extends StackTraceElement> getCallerClass() {
+        return Thread.currentThread().getStackTrace()[2].getClass();
     }
 
     private static List<ClientServerEvent> findClientServerEvents(Page page) {
@@ -171,8 +173,6 @@ public class Weboo {
         urls.add(ClasspathHelper.forClass(Weboo.class));
         Reflections reflections = new Reflections(new ConfigurationBuilder()
               .setUrls(urls));
-        //.filterInputsBy(new FilterBuilder()
-        //    .includePackage(packageName)));
 
         Set<Class<? extends JavaScriptFunction>> jsFounded = reflections.getSubTypesOf(JavaScriptFunction.class);
         for (Class<? extends JavaScriptFunction> p : jsFounded) {
@@ -199,7 +199,7 @@ public class Weboo {
 
         Set<Class<? extends Page>> pagesFounded = reflections.getSubTypesOf(Page.class);
         for (Class<? extends Page> p : pagesFounded) {
-            //    log.debug("Found page: {}", p);
+         //    log.debug("Found page: {}", p.getSimpleName());
             PageManager.add(p);
         }
     }

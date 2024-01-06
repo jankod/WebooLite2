@@ -6,6 +6,8 @@ import hr.ja.weboo.js.JavaScriptFunction;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.annotation.Nullable;
+
 /***
  * After requst split to server (hold on server) and client (send to client and forgot)...
  */
@@ -24,6 +26,7 @@ public class ClientServerEvent {
     private boolean stopPropagation = true;
 
     @JsonIgnore
+    @Nullable
     private ServerHandler serverHandler;
 
     private JavaScriptFunction jsFunction;
@@ -55,7 +58,7 @@ public class ClientServerEvent {
 
     private void checkExistFunction() {
         if (jsFunction != null) {
-            throw new RuntimeException("jsFunction exist!");
+            throw new RuntimeException("jsFunction not exist!");
         }
     }
 }

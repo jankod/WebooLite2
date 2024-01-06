@@ -15,6 +15,14 @@
     </properties>
     <dependencies>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.groovy/groovy -->
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>4.0.17</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>

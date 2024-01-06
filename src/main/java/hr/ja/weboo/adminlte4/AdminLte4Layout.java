@@ -18,7 +18,6 @@ public class AdminLte4Layout implements Layout {
     private List<String> cssFiles = new ArrayList<>();
     private String lastBodyHtmlChunk;
 
-
     protected Footer footer = new Footer();
     protected Sidenav sidenav = new Sidenav();
     protected Topbar topbar = new Topbar();
@@ -30,7 +29,7 @@ public class AdminLte4Layout implements Layout {
     }
 
     @Override
-    public String renderPage(Page page) {
+    public String makeTemplate(Page page) {
 
         javascriptFiles.add("/weboo/jquery-3.7.0.min.js");
         javascriptFiles.add("/weboo/weboo.js");
@@ -40,9 +39,7 @@ public class AdminLte4Layout implements Layout {
 
         Breadcrumb breadcrumb = new Breadcrumb();
 
-
         String body = WidgetUtil.pageToHtml(page);
-
 
         //language=HTML
         String temp = """

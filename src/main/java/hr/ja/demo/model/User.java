@@ -1,6 +1,5 @@
 package hr.ja.demo.model;
 
-import hr.ja.weboo.db.MemoryObject;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import
@@ -19,8 +18,8 @@ import java.util.Map;
 @NoArgsConstructor
 public class User {
 
-
     private static long maxId = 1L;
+
     private final static Map<Long, User> db = new HashMap<>();
 
     private Long id;
